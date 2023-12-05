@@ -1,6 +1,6 @@
 ## Module Decomposition
 
-![image](https://github.com/cojic/CloudSecurityResearch/assets/102799668/0e82644d-0f67-4f95-9afd-e26032ed2808)
+![image](https://github.com/cojic/CloudSecurityResearch/assets/102799668/58e55a02-ae40-428e-bbe7-d29316a848ac)
 
 The diagram illustrates a cloud-based application comprising microservices. Client-side functionalities are implemented through a mobile Android application and a web application built with React. Each microservice functions as an AWS Lambda function, each having its instance of an SQL database. Storage is facilitated through an S3 bucket. An off-the-shelf identity provider solution facilitates user registration, login, and overall user management. Microservices communicate via an SNS (Simple Notification Service) bus.
 
