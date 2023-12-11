@@ -53,7 +53,7 @@ The API gateway intercepts all incoming client requests and sends them through t
 
 ![image](https://github.com/cojic/CloudSecurityResearch/assets/102799668/ed55cfef-3c09-45c4-8942-8148dd37b9c3)
 
-Android and web application users are accessing the server via the same path, which is shown in the following diagram. Android users access the server via an Android device, which has an application installed on it. Web users access the server via an application, that is placed on some domain.
+Android and web application users are accessing the server via the same path, which is shown in the following diagram. Android users access the server via an Android device, which has an application installed on it. Web users access the server via an application, that is placed on some domain.<br>
 ![image](https://github.com/cojic/CloudSecurityResearch/assets/102799668/5eb94dce-1b26-4269-afb8-5024a41012e3)
 
 
