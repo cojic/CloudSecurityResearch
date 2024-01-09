@@ -235,7 +235,51 @@ Attackers, often hard to identify, exploit the infected botnets for various atta
 • Add proper server-side validation for query string and request body parameters, specifically, the one that controls the number of records to be returned in the response. <br>
 • Configure spending limits for all service providers/API integrations. When setting spending limits is not possible, billing alerts should be configured instead. <br>
 
+### Broken Function Level Authorization
 
+#### What is it?
+Function level authorization is a security mechanism used in software applications and APIs to control access to specific functions or actions based on the user’s level of privilege or authorization. 
+
+Broken function level authorization refers to an application programming interface (API) vulnerability that allows unauthorized access to certain functions or features that should be restricted based on the user’s role or permissions. In other words, it is when hierarchical permission systems in APIs are broken or missing.
+
+When the function level authorization API is broken, attackers can bypass the security controls and access restricted functions or actions they cannot perform. This can lead to various security risks, such as unauthorized data access, modification, deletion, and privilege escalation attacks.
+
+#### How does it happen?
+Attackers can discover these flaws in APIs because API calls are structured and predictable, even in REST designs. This can be done in the absence of API documentation or schema definitions by reverse engineering client-side code and intercepting application traffic. Some API endpoints might also be exposed to regular, non-privileged users making them easier for attackers to discover.
+
+Some of the main reasons that cause this vulnerability are: Proper, role-based access controls restrict access to specific functions or operations based on user roles and permissions. When these policies are improperly designed or implemented, unauthorized users can perform actions they should not have access to. <br>
+1. Insufficient or weak access controls: 
+2. The inadequate separation between admin and general functions: This could happen if the user functions are too complex and the developer is unable to create enough separation. <br>
+3. Poor design or implementation of authorization mechanisms: APIs may have flaws in their authorization mechanisms, such as missing or insufficient checks for user roles or permissions or using predictable or easily guessable tokens or session IDs. <br>
+4. Lack of proper input validation: APIs may not properly validate user input or parameters, which can lead to attackers manipulating authorization tokens or session IDs.<br>
+5. Flaws in session management: APIs may have vulnerabilities in their session management mechanisms, such as weak session IDs or session fixation attacks, enabling attackers to hijack sessions and bypass authorization checks. <br>
+6. Inadequate security testing: APIs may not undergo regular security testing to identify and address vulnerabilities, including BFLA flaws. <br>
+   
+
+#### Attack scenario
+In the following attack scenario, the attacker manipulates the directory in the URI path and HTTP method to perform administrative functions.
+
+The attacker uses a legitimate account and sends the following API request to retrieve the user information:<br>
+GET https://api.example.com/v2/userid-1a-1234/userinfo<br>
+
+The attacker uses a script or tool to manipulate the request, enumerating a range of URLs, and receives a valid response for the URL /all_userinfo. This is an unprotected administrative function that returns information for all users:<br>
+GET https://api.example.com/v2/userid-1a-1234/all_userinfo<br>
+
+The attacker expands the scope of his attack by manipulating the HTTP method of the API request to delete users, as follows:<br>
+DELETE https://api.example.com/v2/userid-1a-2222
+<br>
+![image](https://github.com/cojic/CloudSecurityResearch/assets/102799668/17c99b33-e60f-4bc2-8040-6785c02b1e69)
+<br>
+
+
+#### Mitigates
+Your application should have a consistent and easy-to-analyze authorization module that is invoked from all your business functions. Frequently, such protection is provided by one or more components external to the application code.
+<br>
+• The enforcement mechanism(s) should deny all access by default, requiring explicit grants to specific roles for access to every function.<br>
+• Review your API endpoints against function-level authorization flaws, while keeping in mind the business logic of the application and group hierarchy. <br>
+• Make sure that all of your administrative controllers inherit from an administrative abstract controller that implements authorization checks based on the user's group/role. <br>
+• Make sure that administrative functions inside a regular controller implement authorization checks based on the user's group and role. <br>
+• Implement zero trust policies. 
 
 ## Literature
 1. [What is API definition](https://www.altexsoft.com/blog/what-is-api-definition-types-specifications-documentation/) 
@@ -258,5 +302,8 @@ Attackers, often hard to identify, exploit the infected botnets for various atta
 18. [Mass Assigment]( https://owasp.org/API-Security/editions/2019/en/0xa6-mass-assignment/)
 19. [OWASP TOP 10 API Security - Unrestricted resource consumption ](https://owasp.org/API-Security/editions/2023/en/0xa4-unrestricted-resource-consumption/)
 20. [Unrestricted Resource Consumption](https://resilientx.com/blog/owasp-top-10-api-security-unrestricted-resource-consumption/)
-21. [API4:2023 Unrestricted Resource Consumption](https://salt.security/blog/api4-2023-unrestricted-resource-consumption) 
-
+21. [API4:2023 Unrestricted Resource Consumption](https://salt.security/blog/api4-2023-unrestricted-resource-consumption)
+22. [API5:2023 Broken Function Level Authorization](https://owasp.org/API-Security/editions/2023/en/0xa5-broken-function-level-authorization/)
+23. [Broken Function Level Authorization](https://salt.security/blog/api5-2023-broken-function-level-authorization)
+24. [PI5:2019 Broken Function Level Authorization: The What, Impact, Sample Exploit, and Prevention Methods](https://www.indusface.com/blog/broken-function-level-authorization/)
+25. [K000135872: Broken function level authorization | APIs and the OWASP Top 10 guide (2023)](https://my.f5.com/s/article/K000135872) 
