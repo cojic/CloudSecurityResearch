@@ -48,7 +48,7 @@ a.	Cookies and JavaScript Object Notation (JSON) are both widely used behind the
 
 ### Broken Authentication
 
-#### What is it
+#### What is it?
 Broken Authentication is a security vulnerability that occurs when the authentication of a web application is  flawed or improperly implemented.
 When these mechanisms are compromised or misconfigured, attackers can exploit the vulnerabilities to gain unauthorized access to user accounts, impersonate other users, or hijack sessions. This can lead to severe security breaches and expose sensitive user information.
 
@@ -76,9 +76,10 @@ The following points list the scenarios that can cause broken authentication.
 #### Attack scenarios
 
 Broad-based phishing campaigns
-
 <br>
-![image](https://github.com/cojic/CloudSecurityResearch/assets/102799668/22c9fc73-66c1-48f7-921f-3446c6ac2a4a) <br> 
+![image](https://github.com/cojic/CloudSecurityResearch/assets/102799668/914a36c9-f2c1-41a3-b9d2-997714d4bee8)
+
+<br> 
 A broad-based phishing campaign recognizes that threat agents have to gain access to only a few accounts or one admin account to compromise the organization.
 Anatomy of the attack:
 1.	The attacker acquires a list of emails or phone numbers and designs a generic call to action that's relevant to that list (such as a fake Google login page).
