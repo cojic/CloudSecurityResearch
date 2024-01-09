@@ -368,7 +368,7 @@ More dangerous - Modern technologies like cloud providers, Kubernetes, and Docke
 
 #### Attacks scenarios
 
-In a Server-Side Request Forgery (SSRF) attack, the attacker can abuse functionality on the server to read or update internal resources. The attacker can supply or modify a URL to which the code running on the server will read or submit data to, and by carefully selecting the URLs, the attacker may be able to read server configuration such as AWS metadata, connect to internal services like http enabled databases or perform post requests towards internal services which are not intended to be exposed.
+In a Server-Side Request Forgery (SSRF) attack, the attacker can abuse functionality on the server to read or update internal resources. The attacker can supply or modify a URL to which the code running on the server will read or submit data, and by carefully selecting the URLs, the attacker may be able to read server configuration such as AWS metadata, connect to internal services like HTTP enabled databases or perform post requests towards internal services which are not intended to be exposed.
 
 #### Types of SSRF Attacks
 Server-side request forgery attacks usually exploit the trust between the server or another back-end system and the compromised application, allowing attackers to escalate the attacks to perform malicious actions. Here are some examples: <br>
@@ -405,6 +405,89 @@ By implementing real-time monitoring and logging mechanisms, you can identify un
 #### Regular security testing
 Regular security testing is crucial to identify vulnerabilities in web applications and address them proactively.
 
+
+### Security misconfiguration
+
+#### What is it?
+Security misconfigurations are the errors and oversights made during an API’s configuration, implementation, or maintenance that can lead to security vulnerabilities. This happens when developers/ IT teams have not followed security best practices in implementing and configuring APIs. <br>
+A security misconfiguration is a security vulnerability that arises while configuring an application, website, or server. <br>
+It simply means that essential API security settings were implemented incorrectly, or not at all, leaving dangerous gaps and weaknesses in the API. Threat actors can exploit these gaps to orchestrate massive attacks and data breaches. <br>
+
+![image](https://github.com/cojic/CloudSecurityResearch/assets/102799668/fd7a8604-71de-4d73-b207-42f792a16b58)
+<br>
+
+These misconfigurations may occur at different levels of the API stack, including the API server, API gateway, client application, the infrastructure supporting the API, network level, system level, application level, and so on. Almost no difference exists in how these misconfigurations affect web apps and APIs. <br>
+
+#### How does it happen?
+A security misconfiguration occurs when system or application configuration settings are missing or are erroneously implemented, allowing unauthorized access. Common security misconfigurations can occur as a result of leaving default settings unchanged, erroneous configuration changes, or other technical issues. They can occur in applications, cloud infrastructure, networks, and elsewhere. Human mistake accounts for a substantial proportion of security misconfiguration. <br>
+![image](https://github.com/cojic/CloudSecurityResearch/assets/102799668/9a8b6d65-5ff3-4b10-b387-96424f1683a8)
+<br>
+ Here are eight common issues:
+<br>
+• Human error
+<br>
+The most unfortunate part is that the issue occurred due to human error and not a malicious attack. It seems like every few days there is yet another data breach, ransomware threat, or a new security flaw, and companies or organizations must do more to be proactive in how they store sensitive data online.
+<br>
+• Poor or weak encryption
+<br>
+The lack of encryption for data at rest and/or data in transit in applications or cloud instances can potentially expose confidential information. For example, an administrator may overlook configuring a cloud provider’s native encryption solution or they may misconfigure key management for data at rest.
+<br>
+• Excess privilege
+<br>
+Excess privilege happens if an employee or a contractor is given more administrative rights or access than what is required for their job. For example, someone could be given excessive data access permissions for cloud storage containers. This often happens when an employee has moved roles within the organization, is a new hire but had privileges mirrored from an incorrect account, or has left the organization but didn’t have their access revoked on time.
+<br>
+• Misconfigured logging
+Misconfigured logging happens as a result of logging settings being set incorrectly for an application, system or network. This type of misconfiguration could occur in a cloud network where logging is turned off, when there isn’t enough storage to capture logs, or when logs capture insufficient information. In these situations, the effectiveness of using logs to detect network intrusions could be impacted.
+<br>
+• Improper versioning
+<br>
+Misconfigurations due to improper versioning typically happen in storage applications. Versioning is typically used as an extra layer of data protection and/or data retention. For instance, in Amazon S3, versioning is a means of keeping multiple variants of an object in the same bucket. If object versioning is disabled in S3 buckets due to a misconfiguration, you may not be able to preserve and recover overwritten and deleted S3 objects.
+<br>
+• Insecure services
+<br>
+Applications, whether they are on-premises or hosted in a cloud, should be configured to have secure authentication and data exchange. An example of an insecure service is when SSL has not been configured appropriately. Another example is when a service has been set to  exchange credentials in plain text form.
+<br>
+• Misconfigurations related to security tools
+<br>
+Security tool misconfigurations could occur if a user does not install the latest signature files of an anti-malware tool, a user fails to enable antivirus software, a firewall is accidentally disabled or ports are left open on a firewall.
+<br>
+• Using out-of-the-box settings
+<br>
+Out-of-the-box settings are typically configured to provide a good user experience. However, leaving out-of-the-box settings unchanged can also sometimes allow them to be easily exploited. Attackers can take advantage of default passwords, ports that are open by default, or unused user accounts.
+<br>
+
+#### Attacks scenarios
+
+#### Mitigates
+![image](https://github.com/cojic/CloudSecurityResearch/assets/102799668/24aea0d1-56e3-43b6-9a3f-3321599a0b4b)
+<br>
+
+#### Adopt Repeatable Hardening Processes
+This streamlines the deployment of properly configured web applications and servers. You should also ensure that configurations across environments (development, production, and testing) are in sync but with different authorizations.
+
+#### Automate Repetitive Tasks
+An automated process does a better job of repetitive configuration tasks than humans. So, automate as many tasks as you can across development and production to sanitize configuration and verify security settings. Leveraging a solution like Aqua will help automate security tasks at each step.
+
+#### Regularly Update Software
+As a best practice, you must regularly update your software, especially when using third-party code. They often contain patches or fixes for any vulnerabilities that were detected recently.
+
+#### Conduct Frequent Audits
+Employ periodic inspection to detect and mitigate potential security misconfigurations and appsec risks. Here again, Aqua can give you all the information you need to conduct an audit at any time. Aqua tracks and monitors each step accurately and delivers end-to-end visibility.
+
+#### Build Segmented Architecture
+It is crucial to build a robust application architecture that is secure and segmented to create effective separation between components and assets. It is a good strategy to leverage containerization or cloud security groups (ACLs).
+
+#### Avoid Unused Features
+As a part of the installation process, you need to remove any unused features, documentation, components, and samples, and make the application a minimal platform.
+
+Other best practices to prevent security misconfiguration attacks are: <br>
+
+• Emphasize the importance of security configurations to your team and the best practices to achieve absolute security <br>
+• Eliminate cloud storage permissions and verify predefined privileges in the software <br>
+• Avoid enabling directory browsing and turn off non-essential functionalities <br>
+• Do not allow debugging tools to access the server or display internal errors publicly <br>
+• Ensure that you update all your packages and libraries <br>
+
 ## Literature
 1. [What is API definition](https://www.altexsoft.com/blog/what-is-api-definition-types-specifications-documentation/) 
 2. [OWASP TOP 10 API Security](https://owasp.org/API-Security/editions/2023/en/0x11-t10/)
@@ -437,3 +520,6 @@ Regular security testing is crucial to identify vulnerabilities in web applicati
 29. [API7:2023 Server Side Request Forgery](https://owasp.org/API-Security/editions/2023/en/0xa7-server-side-request-forgery/)
 30. [Server Side Request Forgery](https://owasp.org/www-community/attacks/Server_Side_Request_Forgery)
 31. [How to Prevent Server-Side Request Forgery](https://www.evolvesecurity.com/blog-posts/how-to-prevent-server-side-request-forgery)
+32. [API8:2023 Security Misconfiguration](https://owasp.org/API-Security/editions/2023/en/0xa8-security-misconfiguration/)
+33. [Security Misconfiguration: Impact, Examples and Prevention](https://www.balbix.com/insights/security-misconfiguration-impact-examples-and-prevention/)
+34. [Security Misconfiguration: Types, Examples & Prevention Tips](https://www.aquasec.com/cloud-native-academy/supply-chain-security/security-misconfigurations/)
