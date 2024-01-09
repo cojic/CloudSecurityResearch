@@ -183,6 +183,60 @@ Implement a schema-based response validation mechanism to enforce the expected d
 Keep the returned data structures to the minimum required by the business or functional requirements of the endpoint. Avoid exposing unnecessary information that could pose security risks.
 
 
+### Unrestricted resource consumption 
+
+#### What is it?
+Unrestricted resource consumption is a frequently overlooked API vulnerability. API requests consume resources such as network, CPU, memory, and storage. When there are no restrictions on the number, content, or type of requests made by users, an attacker can exploit this vulnerability, impacting the APIs' availability and service rate. The following describes some of the techniques attackers can use:
+<br> 
+• Send a high volume of API requests to overload server resources. <br>
+• Send specially crafted requests with large payloads or large file uploads or downloads that can excessively consume server resources.<br>
+• Make targeted requests that lead to increases in operational costs. <br>
+
+#### How does it happen?
+Unrestricted resource consumption is rooted in security weaknesses that exist in APIs. These weaknesses include:
+
+• Lack of resource limits: Many APIs fail to implement appropriate limits on client interactions or resource consumption. This allows attackers to exploit the API by overwhelming it with excessive requests or consuming excessive resources.<br>
+• Insufficient input validation: APIs may lack proper validation mechanisms for incoming parameters and payloads. Without proper validation, attackers can manipulate input data to force resource consumption beyond acceptable limits. <br>
+• Inadequate rate limiting: APIs often lack effective rate-limiting mechanisms to control the frequency of client interactions. Without rate limits, attackers can bombard the API with a high volume of requests, leading to resource exhaustion. <br>
+• Poor query string and request body validation: APIs may not implement thorough validation for query string and request body parameters. Attackers can manipulate these parameters to control the number of records returned in the API response, leading to excessive resource consumption. <br> 
+
+#### Attack scenarios
+
+#### Denial-of-Service Attack
+A very popular example of an attack that exploits this vulnerability is distributed denial-of-service (DDoS) attacks targeting APIs. 
+DDoS, or distributed denial of service, is a type of cyberattack that tries to make a website or network resource unavailable by flooding it with malicious traffic so that it is unable to operate.
+
+In a distributed denial-of-service (DDoS) attack, an attacker overwhelms its target with unwanted internet traffic so that normal traffic can’t reach its intended destination.
+
+During a DDoS attack, attackers use large numbers of exploited machines and connected devices across the Internet — including Internet of Things (IoT) devices, smartphones, personal computers, and network servers — to send a flood of traffic to targets.
+
+Anatomy of the attack:
+1. Infection and Botnet Formation:
+Attackers use malware or exploit security vulnerabilities to infect devices.
+Infected devices, known as bots or zombies, spread malware and join a botnet.
+Botnets are formed, amplifying attack strength using numerous compromised devices.
+
+3. Execution of Attack:
+Attackers remotely instruct bots in the botnet to initiate a DDoS attack.
+Bots flood the victim's IP address with requests, overwhelming the system.
+Excessive traffic leads to a denial of service, disrupting normal access.
+
+3. Consequences and Further Misuse:
+Legitimate device owners become secondary victims or unknowing participants.
+Attackers, often hard to identify, exploit the infected botnets for various attacks.
+"Attack-for-hire" services enable inexperienced individuals to launch DDoS attacks using rented botnets.
+
+#### Mitigates
+• Use a solution that makes it easy to limit memory, CPU, number of restarts, file descriptors, and processes such as Containers / Serverless code (e.g. Lambdas). <br>
+• Define and enforce a maximum size of data on all incoming parameters and payloads, such as maximum length for strings, maximum number of elements in arrays, and maximum upload file size (regardless of whether it is stored locally or in cloud storage). <br>
+• Implement a limit on how often a client can interact with the API within a defined timeframe (rate limiting). <br>
+• Rate limiting should be fine-tuned based on the business needs. Some API Endpoints might require stricter policies. <br>
+• Limit/throttle how many times or how often a single API client/user can execute a single operation (e.g. validate an OTP, or request password recovery without visiting the one-time URL). <br>
+• Add proper server-side validation for query string and request body parameters, specifically, the one that controls the number of records to be returned in the response. <br>
+• Configure spending limits for all service providers/API integrations. When setting spending limits is not possible, billing alerts should be configured instead. <br>
+
+
+
 ## Literature
 1. [What is API definition](https://www.altexsoft.com/blog/what-is-api-definition-types-specifications-documentation/) 
 2. [OWASP TOP 10 API Security](https://owasp.org/API-Security/editions/2023/en/0x11-t10/)
@@ -201,5 +255,8 @@ Keep the returned data structures to the minimum required by the business or fun
 15. [OWASP Top 10 API Security: Broken Object Property Level Authorization](https://resilientx.com/blog/owasp-top-10-api-security-broken-object-property-level-authorization/) 
 16. [API3:2023 Broken Object Property Level Authorization]( https://salt.security/blog/api3-2023-broken-object-property-level-authorization) 
 17. [Excessive Data Exposure](https://owasp.org/API-Security/editions/2019/en/0xa3-excessive-data-exposure/) 
-18. [Mass Assigment]( https://owasp.org/API-Security/editions/2019/en/0xa6-mass-assignment/) 
+18. [Mass Assigment]( https://owasp.org/API-Security/editions/2019/en/0xa6-mass-assignment/)
+19. [OWASP TOP 10 API Security - Unrestricted resource consumption ](https://owasp.org/API-Security/editions/2023/en/0xa4-unrestricted-resource-consumption/)
+20. [Unrestricted Resource Consumption](https://resilientx.com/blog/owasp-top-10-api-security-unrestricted-resource-consumption/)
+21. [API4:2023 Unrestricted Resource Consumption](https://salt.security/blog/api4-2023-unrestricted-resource-consumption) 
 
