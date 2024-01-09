@@ -15,10 +15,8 @@ Insecure Direct Object Reference (IDOR) and BOLA are the same thing. The name wa
 Broken object-level authorization is a security vulnerability that occurs when an application or application programming interface (API) provides access to data objects based on the user’s role but fails to verify if the user is authorized to access those specific data objects. This vulnerability allows malicious users to bypass authorization and access sensitive data or execute unauthorized actions, to which they would otherwise not have access. 
 
 There are two main types of BOLA:
-1.	Based on user ID
-a.	The API endpoints receive a user ID (from the client’s side) and access the user object based on this ID. For example: /api/trips/get_all_trips_for_user?user_id=777
-2.	Based on object ID
-a.	The API endpoint receives an ID of an object  (from the client’s side)  that is not a user object. For example:
+1.	Based on user ID: The API endpoints receive a user ID (from the client’s side) and access the user object based on this ID. For example: /api/trips/get_all_trips_for_user?user_id=777
+2.	Based on object ID:	The API endpoint receives an ID of an object  (from the client’s side)  that is not a user object. For example:
 /api/trips/receipts/download_as_pdf?receipt_id=1111. Here arises the main problem - is the user allowed to access the object with this object ID?
 
 #### How does this happen?
