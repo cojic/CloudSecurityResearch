@@ -281,6 +281,72 @@ Your application should have a consistent and easy-to-analyze authorization modu
 • Make sure that administrative functions inside a regular controller implement authorization checks based on the user's group and role. <br>
 • Implement zero trust policies. 
 
+### Unrestricted Access to Sensitive Business Flows
+
+#### What is it?
+Unrestricted Access to Sensitive Business Flows involves exploitation of the business model behind the application. In these vulnerabilities, the API facilitates an unexpected and unwanted business flow. Most commonly, exploitation of this class of vulnerabilities might be called API Abuse or be associated with malicious bot traffic. 
+ It allows attackers to potentially manipulate, exploit, or automate actions that can have a devastating impact on an organization. 
+
+#### How does it happen?
+Some of the main reasons this vulnerability occurs:<br>
+• Insufficient Restrictions: APIs should enforce limitations on the actions users can perform, but in this case, they fail to do so.<br>
+• Excessive Functionality: The API doesn't properly restrict or control certain functionalities, allowing them to be used in unintended or excessive ways.<br>
+• Exploiting Gaps in Business Logic: Attackers exploit these gaps by repeatedly using specific API endpoints or methods in ways that the system doesn't expect or intend.<br>
+
+#### Attack scenarios
+
+Each type of the following attacks targets weaknesses within the API's design, implementation, or usage.
+
+#### API Abuse
+Attackers exploit the API endpoints by using them in unintended ways. This might involve excessive use of certain functions or bypassing restrictions to gain unauthorized access or manipulate data. Some of the "use cases" attackers use are: <br>
+• Fake Accounts: Attackers might use an unrestricted account creation API to generate hundreds or thousands of fake accounts, allowing them to overwhelm an application or engage in programmatic exploitation of their status as ‘authorized’ users. <br>
+• Spamming: An API to add user-generated content, such as comments or reviews can allow an attacker to add malicious links or even simply advertisements into an application at a massive scale.  <br>
+• Scalping: An API that allows direct purchasing without browsing through a web interface can allow an attacker to jump ahead of desired customers and purchase an inventory of items to resell at a higher price. <br>
+• Content Scraping: Of course, APIs that provide data, whether about products, prices, or users, can be used to collect that data in bulk for malicious purposes. <br>
+
+#### Rate Limiting Bypass
+Attackers attempt to bypass rate-limiting mechanisms put in place to control the number of API requests a user or entity can make within a specified timeframe. By doing so, they can overwhelm the system or perform actions beyond allowed limits.
+
+#### Business Logic Abuse
+Exploiting flaws in the logic of the application's business processes accessed via the API. Attackers manipulate the sequence of actions or parameters to achieve results not intended by the system, such as accessing restricted data or performing unauthorized transactions.
+
+#### Parameter Tampering
+Modifying parameters within API requests to manipulate the system's behavior. Attackers might alter inputs (such as changing values in URLs, headers, or request bodies) to bypass security controls, access unauthorized resources, or execute unintended operations.
+
+#### Automated Attacks (Bot Traffic)
+Malicious bots can be used to automate attacks on APIs. These bots can flood the system with a high volume of requests, attempting to overload it, steal sensitive data, or cause disruption. Automated attacks can cause major consequences.
+
+#### API Injection
+Similar to traditional code injection attacks, where attackers inject malicious code or unexpected inputs into API requests to compromise the system's security, gain unauthorized access, or manipulate functionalities.
+
+#### Mitigates
+Detecting unrestricted access to sensitive business flow vulnerabilities is a challenge on its own. <br>
+The mitigation planning should be done in two layers: <br>
+• Business - identify the business flows that might harm the business if they are excessively used.<br>
+• Engineering - choose the right protection mechanisms to mitigate the business risk. <br>
+
+Constant monitoring of API access with flags for suspicious use can help detect excessive API calls. For example, flagging non-human patterns, such as repeat purchases, actions within seconds, or consumption of a large number of resources within a short period. <br>
+
+Prevention requires regular code reviews focusing on API access controls and limits for excessive use. Developers need to think like an attacker and the ways they might exploit systems by creating too many resources within a particular period. <br>
+Some of the protection mechanisms are more simple while others are more difficult to implement. One of the main ideas of protection is to slow down automated threats.
+Protecting sensitive business flow means testing across scenarios. <br>
+Other strategies include: <br>
+• Requiring reauthentication for each API call <br>
+• Employing multifactor authentication (MFA), captcha, or biometric identification <br>
+• Blocking of IP addresses associated with Tor exit nodes and proxies <br>
+• Denying access to unexpected client devices using device fingerprinting <br>
+• Limiting or capping repeat activities for sensitive business flows <br>
+
+Secure and limit access to APIs that are consumed directly by machines (such as developer and B2B APIs). They tend to be an easy target for attackers because they often don't implement all the required protection mechanisms
+
+Additionally, some more mitigation techniques are listed below which can be helpful when dealing with API security. <br>
+• Authentication and Authorization: Implement robust authentication and authorization mechanisms to ensure that only authorized users or systems can access sensitive business flows.
+Role-Based Access Control: Assign roles and permissions to users, allowing them to access only the specific resources and actions necessary for their job functions. <br>
+• API Tokens: Use API tokens for authentication and authorization. Tokens can be revoked or rotated to enhance security. <br>
+• Rate Limiting: Implement rate limiting to prevent abuse and brute force attacks on APIs. <br>
+• Logging and Monitoring: Maintain detailed logs of API access and monitor for any suspicious activity. Anomalies can be detected and addressed promptly. <br>
+• Regular Security Testing: Conduct regular security assessments, including penetration testing and code reviews, to identify and fix vulnerabilities. <br>
+
 ## Literature
 1. [What is API definition](https://www.altexsoft.com/blog/what-is-api-definition-types-specifications-documentation/) 
 2. [OWASP TOP 10 API Security](https://owasp.org/API-Security/editions/2023/en/0x11-t10/)
@@ -306,4 +372,7 @@ Your application should have a consistent and easy-to-analyze authorization modu
 22. [API5:2023 Broken Function Level Authorization](https://owasp.org/API-Security/editions/2023/en/0xa5-broken-function-level-authorization/)
 23. [Broken Function Level Authorization](https://salt.security/blog/api5-2023-broken-function-level-authorization)
 24. [PI5:2019 Broken Function Level Authorization: The What, Impact, Sample Exploit, and Prevention Methods](https://www.indusface.com/blog/broken-function-level-authorization/)
-25. [K000135872: Broken function level authorization | APIs and the OWASP Top 10 guide (2023)](https://my.f5.com/s/article/K000135872) 
+25. [K000135872: Broken function level authorization | APIs and the OWASP Top 10 guide (2023)](https://my.f5.com/s/article/K000135872)
+26. [API6:2023 Unrestricted Access to Sensitive Business Flows](https://owasp.org/API-Security/editions/2023/en/0xa6-unrestricted-access-to-sensitive-business-flows/)
+27. [OWASP Top 10 API security risks: Unrestricted access to sensitive business flows](https://blog.barracuda.com/2023/07/10/owasp-top-10-api-unrestricted-access-senstive-business-flows)
+28. [2023 OWASP Top-10 Series: API6:2023 Unrestricted Access to Sensitive Business Flows](https://lab.wallarm.com/api62023-unrestricted-access-to-sensitive-business-flows/)
