@@ -75,19 +75,17 @@ The following points list the scenarios that can cause broken authentication.
 
 #### Attack scenarios
 
-Broad-based phishing campaigns
-<br>
+#### Broad-based phishing campaigns
 ![image](https://github.com/cojic/CloudSecurityResearch/assets/102799668/914a36c9-f2c1-41a3-b9d2-997714d4bee8)
-
 <br> 
 A broad-based phishing campaign recognizes that threat agents have to gain access to only a few accounts or one admin account to compromise the organization.
 Anatomy of the attack:
 1.	The attacker acquires a list of emails or phone numbers and designs a generic call to action that's relevant to that list (such as a fake Google login page).
 2.	The phishing message is broadly distributed, and the attacker waits to see which credentials are collected.
 3.	The attacker uses stolen credentials to access the data they are after or adopts that identity for a more targeted attack on a high-value employee.
+<br>
 
-Spear phishing campaigns
-<br> 
+#### Spear phishing campaigns
 ![image](https://github.com/cojic/CloudSecurityResearch/assets/102799668/357613ed-32e2-4b0e-8f62-c119db3d9338)
 <br>
 Spear phishing is a targeted form of phishing that often involves more research in designing the target list and phishing message. As opposed to broad-based campaigns, spear phishing typically focuses on a small number of employees to evade automated filters. The level of social engineering is also more sophisticated, with messages being more personal and the malicious call-to-action playing on emotions such as curiosity, fear, or rewards. 
@@ -95,27 +93,31 @@ Anatomy of the attack:
 1.	The attacker picks targets carefully, doing extensive research across available resources such as social media or web presence
 2.	The attacker crafts a phishing message designed to appear legitimate, such as pretending to be a colleague and referencing a topical situation, such as a recent company party that the attacker learned of online.
 3.	The victim is compelled to enter credentials by appealing to his or her emotions, such as a curiosity to see photos from the party behind a fake login page.
-4.	The attacker uses the credentials from the high-value target to access sensitive data or execute the next stage of their attack.
-Credential stuffing
-<br>
-![image](https://github.com/cojic/CloudSecurityResearch/assets/102799668/3ce46501-5f28-4d78-ba89-65d7bc6a47d3)
+4.	The attacker uses the credentials from the high-value target to access sensitive data or execute the next stage of their attack.<br>
+
+#### Credential stuffing
+![image](https://github.com/cojic/CloudSecurityResearch/assets/102799668/25616f5f-862f-4893-8d3d-dad1ef3a26b4)
+
 <br>
 Credential stuffing is a cyberattack method in which attackers use lists of compromised user credentials to breach into a system. The attack uses bots for automation and scale and is based on the assumption that many users reuse usernames and passwords across multiple services. Statistics show that about 0.1% of breached credentials attempted on another service will result in a successful login.
 
 Anatomy of the attack: 
 1.	Attacker acquires credentials from a website breach or password dump site.
 2.	Automated tools are used to test credentials across a variety of different sites.
-3.	When a successful login occurs, the attacker harvests the sensitive data or executes the next stage of their breach.
-Password spraying <br>
-![image](https://github.com/cojic/CloudSecurityResearch/assets/102799668/9d8357ae-0a9d-4654-a3c1-7a938c773841)
+3.	When a successful login occurs, the attacker harvests the sensitive data or executes the next stage of their breach.<br>
+
+#### Password spraying 
+![image](https://github.com/cojic/CloudSecurityResearch/assets/102799668/b11d6449-ae65-443f-9bd5-8c518dbc9fb9)
+
 <br>
 Password spraying is another form of brute force attack whereby an attacker takes advantage of our tendency to rely on common passwords such as “password1” (which according to Pwned Passwords has appeared in a data breach over 2.3 million times!).
 Anatomy of the attack:
 1.	The attacker uses a small list of commonly used passwords that match the complexity policy of the domain.
 2.	Instead of trying multiple passwords for one user, the attacker uses the same common password across many different accounts which helps avoid detection.
 3.	Once the attacker encounters a successful login, the attacker harvests the sensitive data or executes the next stage of their breach.
-Man-in-the-middle (MITM) attacks
-<br>
+4.	<br> 
+
+#### Man-in-the-middle (MITM) attacks
 ![image](https://github.com/cojic/CloudSecurityResearch/assets/102799668/ebbc38e8-6a40-46e2-a530-a4ea505ad07b)
 <br>
 A MitM attack on an organization is a highly targeted attack that can result in a full take of credentials and data-in-transit if executed correctly. After intercepting a network connection, an attacker can also take advantage of “session hijacking” which compromises the web session by stealing the session token.
