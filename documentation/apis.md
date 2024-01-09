@@ -1,103 +1,49 @@
+## API SECURITY
 
-# API ATTACKS
-
-An API attack refers to any hostile or attempted hostile usage of an API (Application Programming Interface).
-Attackers exploit vulnerabilities in API endpoints to gain unauthorized access, compromise data, disrupt services, or perform other malicious activities. 
-
-Understanding the different types of API attacks is crucial for implementing effective security measures. Below are some of the most common API attack vectors.
-
-### Injection attacks 
-The API injection can be a command injection attack. It means the API will bring a system command to the server. 
-The command, when executed, can delete user directories or even the entire site from the server. SQL injections are a common variant of this threat.
-
-### DoS/DDoS (Distributed Denial of Service) Attacks
-A denial of service  (DOS) attack  occurs when  an attacker disrupts the services  by intentionally sending a large amount of traffic to overwhelm the system.
-This prevents the  system from processing the request of legitimate users and thus denying them from using the service. In the context of cloud computing, 
-the DOS attack can be targeted to the applications running on the cloud or it can target the cloud platform infrastructure. 
-A distributed denial-of-service (DDoS) attack is a DoS attack that uses multiple computers or machines to flood a targeted resource. 
-
-### Authentication Hijacking
-Session hijacking, also known as TCP session hijacking, is a method of taking over a web user session by surreptitiously obtaining the session ID and masquerading as the authorized user. Once the user's session ID has been accessed, the attacker can masquerade as that user and do anything the user is authorized to do on the network.
-A byproduct of this type of attack is the ability to gain access to a server without having to authenticate to it. Once the attacker hijacks a session, they no longer have to worry about authenticating to the server as long as the communication session remains active. The attacker enjoys the same server access as the compromised user because the user has already authenticated to the server prior to the attack.
-
-Some of the basic session hijack techniques are:
-1. **Predictable Sessions Token ID:** Some websites create session IDs predictably, making them easier to guess. Attackers can analyze patterns in captured IDs to predict valid session IDs, potentially accessing user sessions.
-2. **Man-in-the-Browser Attack:** Attackers infect a user's computer with malware. This malware alters transaction details on web pages without the user's knowledge, enabling unauthorized transactions or modifications.
-3. **Cross-Site Scripting (XSS):** Cybercriminals exploit vulnerabilities to insert harmful scripts into web pages. If session cookies lack HttpOnly protection, attackers can access session keys, allowing session hijacking.
-4. **Session Sidejacking:** Through packet sniffing, attackers intercept session cookies from a user's network traffic. If only the login pages use encryption (TLS) and not the entire session, attackers can impersonate the user within the web application.
-5. **Session Fixation Attacks:** These attacks steal a valid, unauthenticated session ID. Attackers trick users into authenticating with this ID, granting access to the victim's session. Variations include hiding session tokens in URLs, form fields, or session cookies.
-Each of these threats exploits weaknesses in web applications or user behaviors to gain unauthorized access, manipulate transactions, or impersonate users. Protecting against them involves implementing secure session management practices, using encryption throughout sessions, and preventing script injections or predictable session token generation.
-Session hijack attacks are usually waged against busy networks with a high number of active communication sessions. The high network utilization not only provides the attacker with a large number of sessions to exploit, but it can also provide the attacker with a shroud of protection due to a large number of active sessions on the server.
-
-### Parameter Tempering
-Parameter tampering is a form of web attack that involves manipulating or interfering with the application business logic that is exchanged between client and server to alter application data, 
-such as user credentials, permissions, and price information.
-
-1. **Impact of manipulating URL query strings**
-Attackers may tamper with the URL query string to perform malicious actions, such as stealing data. By manipulating query strings, they can access information from a database,
-understand the architecture of a web application or even execute commands on the web server.
-
-2. **Impact of manipulating HTTP POST data**
-Since query strings are fairly simple, many web applications use the POST method to pass data between pages.
-POST data is not displayed by browsers, so it is considered a safe way to retrieve information. However, attackers can still modify the data to gain access to sensitive information.
-
-3. **Impact of manipulating HTTP headers**
-Headers are commonly used by HTTP requests and responses to deliver information about the HTTP message.
- A referer header is included in the HTTP request header. It contains the URL of the webpage from which the request originated and enables websites to identify the location of visitors.
-This data can be used to optimize caching and for analytics and logging.
-Attackers can modify the referer header to make it look like it came from the original site. 
-By submitting a malicious string, they can construct arbitrary HTTP responses and launch many kinds of attacks, including cross-user defacement or web and browser cache poisoning. 
-They may also hijack pages or initiate cross-site scripting attacks.
-
-5. **Impact of manipulating website cookies**
-The web server creates cookies to store user preferences and other data, such as timestamps and session tokens.
-An attacker can modify or poison a cookie to bypass authentication to access a user's account and view, manipulate, or exfiltrate sensitive data.
+### API (Application Programming Interface)
+APIs are mechanisms that enable two software components to communicate with each other using a set of definitions and protocols. In other words, API allows one software (or software component) to make its data and functionalities available for other programs.
+The working principle of an API is commonly expressed through the request-response communication between a client and a server. The client is any front-end application that a user interacts with. The server is in charge of backend logic and database operations. In this scenario, an API works as a middle layer between the client and the server, making sending data requests and responses possible. <br>
+![image](https://github.com/cojic/CloudSecurityResearch/assets/102799668/f7aac767-8cfc-4df1-bf56-87d2cf826595) <br>
+With the transition to cloud environments, APIs become more accessible. This transformation brings easier access to users but also increases exposure to threats and risks, requiring a special focus on security and data protection. The following text discusses the 2023 list of OWASP API vulnerabilities 
 
 
-### Man-in-the-middle risks
-APIs are subject to increased risk from man-in-the-middle attacks when the transmission is not encrypted
-or signed or when there is a problem setting up a secure session. A man-in-the-middle attack in cyber security qualifies as any circumstance where a threat actor places themselves between 
-a user and an entity such as a network, website, or application to obtain information. 
-Main types of MITM Attacks:
-1. IP Spoofing: Manipulating Internet Protocol (IP) addresses to deceive users and gather sensitive data.
-2. DNS Spoofing: Forging Domain Name System (DNS) records to redirect users to fake websites for unauthorized data collection.
-3. HTTPS Spoofing: Redirection from secure HTTPS to unencrypted HTTP, allowing unauthorized data tracking and theft.
-4. Email Hijacking: Unauthorized access to email accounts for monitoring transactions or manipulating users into fraudulent actions.
-5. Wi-Fi Eavesdropping: Intercepting data transmitted over deceptive public Wi-Fi networks to extract sensitive information.
-6. SSL Hijacking: Intercepting Secure Sockets Layer (SSL) connections to steal encrypted data between users and servers.
-7. Session Hijacking: Unauthorized access to browser session data, especially cookies storing sensitive user information.
+### BROKEN OBJECT-LEVEL AUTHORIZATION (BOLA)
+The OWASP list of top 10 API vulnerabilities identifies Broken Object Level Authorization (BOLA) as the number one vulnerability. Almost every company has APIs that are vulnerable to BOLA and there are currently no direct solutions to mitigate this vulnerability (depending on business logic). 
+Insecure Direct Object Reference (IDOR) and BOLA are the same thing. The name was changed from IDOR to BOLA as part of the project.
 
-# MITIGATES
+#### What is it?
+Broken object-level authorization is a security vulnerability that occurs when an application or application programming interface (API) provides access to data objects based on the user’s role but fails to verify if the user is authorized to access those specific data objects. This vulnerability allows malicious users to bypass authorization and access sensitive data or execute unauthorized actions, to which they would otherwise not have access. 
 
-### Clearly define the data type
- Developers must define the specific data types, like string or alphanumeric characters, that the web application accepts.
- ### Control parameter passing
- ### Control parameters with incorrect format
- ### Never store critical data in hidden parameters
- Critical data, such as product prices, order numbers, etc., should never be stored in hidden parameters or cookies since doing this can pose a major security risk and increase the possibility of a parameter tampering attack.
+There are two main types of BOLA:
+1.	Based on user ID
+a.	The API endpoints receive a user ID (from the client’s side) and access the user object based on this ID. For example: /api/trips/get_all_trips_for_user?user_id=777
+2.	Based on object ID
+a.	The API endpoint receives an ID of an object  (from the client’s side)  that is not a user object. For example:
+/api/trips/receipts/download_as_pdf?receipt_id=1111. Here arises the main problem - is the user allowed to access the object with this object ID?
 
+#### How does this happen?
+BOLA vulnerabilities are often simple to exploit but can be difficult for developers to identify. 
+BOLA vulnerabilities are often caused by insecure coding practices, such as failing to properly validate user input or check permissions before granting access to an object. This happens when an API uses overly permissive access controls or when API resources are not properly protected.
+This leads to unauthorized information disclosure, modification, or destruction of all data.
+Some of the main reasons for BOLA vulnerability:
+1.	Insufficient checks during user request validation
+2.	Weak or absent access controls based on user roles and permissions
+3.	Incorrectly configured permissions for user roles
+4.	Lack of context-aware authorization when granting access
 
-### Use end-to-end encryption
-Where possible, instruct employees to turn on encryption for emails and other communication channels. For added security, only use communications software that offers encryption right out of the box. Some applications automatically turn on encryption in the background—such as WhatsApp Messenger, for example. However, if employees wish to verify that their messages are indeed encrypted, they will need to carry out a special process, such as scanning and comparing QR codes available in the WhatsApp application on each person's phone.
+#### Attack scenarios
+There are four different types of BOLA attacks:
+1.	URL tampering
+a.	URL tampering is the simplest way to exploit a BOLA vulnerability and often requires little or no technical expertise. In this type of attack, we can simply change the value of a parameter in our web browser’s address bar. 
+2.	Body manipulation
+a.	Body manipulation is very similar to URL tampering, except that the attacker is modifying one or more values in the body of the document instead of in the URL. This can mean changing the values of radio buttons, checkboxes, or other form elements. It might also be possible to change hidden form values. 
+3.	Cookie or JSON ID manipulation
+a.	Cookies and JavaScript Object Notation (JSON) are both widely used behind the scenes to store and exchange data between client and server, helping make web pages more dynamic. When we log into a website, for example, the server may store a user or session ID value inside a cookie or JSON object. If the application contains an IDOR vulnerability, an attacker could change these values.   
+4.	Path traversal, also called directory traversal, is a unique type of BOLA vulnerability that an attacker leverages to access or manipulate files or folders directly on the server that runs the web application. This is a level deeper than other types of IDOR attacks because it allows direct access to file system resources instead of database records. Path traversal can allow an attacker to access configuration files, discover user credentials, or even obtain a fully functional shell on the target. 
 
-### Use a virtual private network (VPN) when connecting to the internet
-VPNs encrypt the data traveling between the devices and the VPN server. Encrypted traffic is harder to modify.
-
-### Deploy multi-factor authentication (MFA)
- So you do not rely on passwords alone, organizations should encourage the use of MFA for access to devices and online services. This practice has quickly become organizations' best defense against threats.
-
-### Implement an API Gateway
-An API gateway serves as a single entry point for all API traffic, providing a layer of abstraction between your application and the underlying services. This can simplify the management of your API, improve its performance, and enhance its security.
-
-The API gateway can enforce security policies, perform input validation and sanitization, implement rate limiting and throttling, and provide other security features. It can also monitor API traffic, detect unusual patterns, and respond to potential threats.
-
-### API monitoring
-Finally, monitoring API usage is necessary for the entire time the API is in production. API analytics can provide extensive insight into the usage, behavior, and security of your APIs. While this is important for managing API performance, monitoring APIs for sudden abnormal spikes in usage or changes in patterns can also help you identify a compromised API or an unauthorized user trying to break into your system. Another aspect of Red Hat 3scale API Management includes comprehensive API analytics to track the usage of your APIs.
-
-## Literature
-1. [Parameter Tempering](https://www.techtarget.com/searchsecurity/definition/parameter-tampering)
-2. [Protecting your apis against attack and hijack](https://docs.broadcom.com/doc/protecting-your-apis-against-attack-and-hijack)
-3. [What is api gateway](https://www.tibco.com/reference-center/what-is-an-api-gateway)
-4. [Man in the middle attack](https://www.strongdm.com/blog/man-in-the-middle-attack)
-5. [DOS vs DDOS](https://www.fortinet.com/resources/cyberglossary/dos-vs-ddos)
-6. [Api injection attacks prevention](https://www.computer.org/publications/tech-news/trends/api-injection-attacks-prevention)
+#### Mitigates 
+•	Implement a proper authorization mechanism that relies on the user policies and hierarchy. This means ensuring that every request to access a specific object is authorized. A user should only be able to access the objects they have permission to. This could involve implementing access control lists or role-based access control mechanisms, which regulate access based on the user’s role and permissions.<br>
+•	Use the authorization mechanism to check if the logged-in user has access to perform the requested action on the record in every function that uses input from the client to access a record in the database.<br>
+•	Prefer the use of random and unpredictable values as GUIDs for records' IDs. By making these IDs random or non-guessable, you can add an extra layer of security to your application and make it harder for attackers to exploit BOLA vulnerabilities.<br>
+•	Implementing API gateways and rate limiting can also help prevent BOLA attacks. An API gateway can serve as a single entry point for all API requests, providing a layer of security by controlling how requests are handled. One of the security features provided by API gateways is rate limiting. This can prevent attackers from making too many requests in a short period, which is often a sign of a BOLA attack. By limiting the number of requests a user can make, you can slow down an attacker and potentially prevent a data breach. <br>
+•	Write tests to evaluate the vulnerability of the authorization mechanism. Do not deploy changes that make the tests fail.
