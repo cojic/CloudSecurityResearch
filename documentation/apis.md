@@ -136,7 +136,6 @@ The following are the ways of preventing broken authentication attacks:
 5.	Generating new random session IDs with high entropy after login protects against hackers. Remember, those session IDs should not be present in the URL and invalidated after logout.
 
 
-
 ### Broken Object Property Level Authorization
 
 #### What is it?
@@ -347,6 +346,65 @@ Role-Based Access Control: Assign roles and permissions to users, allowing them 
 • Logging and Monitoring: Maintain detailed logs of API access and monitor for any suspicious activity. Anomalies can be detected and addressed promptly. <br>
 • Regular Security Testing: Conduct regular security assessments, including penetration testing and code reviews, to identify and fix vulnerabilities. <br>
 
+### Server Side Request Forgery
+
+#### What is it?
+Server-side request forgery (SSRF) is a vulnerability that lets a malicious hacker send a request from the back end of the software to another server or a local service. The server or service that receives that request believes that the request came from the application and is legitimate. <br>
+
+An SSRF attack can force a server to connect to services within the organization that would otherwise be inaccessible to non-company users. Hackers could also force the server to connect to external systems to exfiltrate data such as usernames and passwords. <br>
+
+This data can then be used to further exploit more valuable information, either by inputting it into the system directly or as the basis of an XSS attack against high-value targets within the company. <br>
+
+The SSRF risk can not always be eliminated. While choosing a protection mechanism, it is important to consider the business risks and needs.
+
+#### How does it happen?
+SSRF flaws occur when an API is fetching a remote resource without validating the user-supplied URL. It enables an attacker to coerce the application to send a crafted request to an unexpected destination, even when protected by a firewall or a VPN.
+
+Modern concepts in application development make SSRF more common and more dangerous. <br>
+
+More common - the following concepts encourage developers to access an external resource based on user input: Webhooks, file fetching from URLs, custom SSO, and URL previews. <br>
+
+More dangerous - Modern technologies like cloud providers, Kubernetes, and Docker expose management and control channels over HTTP on predictable, well-known paths. Those channels are an easy target for an SSRF attack.<br>
+
+#### Attacks scenarios
+
+In a Server-Side Request Forgery (SSRF) attack, the attacker can abuse functionality on the server to read or update internal resources. The attacker can supply or modify a URL to which the code running on the server will read or submit data to, and by carefully selecting the URLs, the attacker may be able to read server configuration such as AWS metadata, connect to internal services like http enabled databases or perform post requests towards internal services which are not intended to be exposed.
+
+#### Types of SSRF Attacks
+Server-side request forgery attacks usually exploit the trust between the server or another back-end system and the compromised application, allowing attackers to escalate the attacks to perform malicious actions. Here are some examples: <br>
+
+#### SSRF Targeting the Server
+SSRF attacks often target the server, with the attacker inducing the vulnerable application to send HTTP requests to the hosting server. Usually, the attacker provides a URL pointing to a loopback adapter. <br> 
+
+For instance, an eCommerce application might allow users to see if a product is in stock by querying a REST API on the back end. It implements this function by passing a URL to the API via a front-end request—the browser makes an HTTP request to provide the user with the relevant information. <br>
+
+However, attackers can exploit this functionality by modifying requests and specifying a local URL like the admin host, inducing the server to retrieve the admin URL’s contents. Normally, only authorized users can access the admin, but attackers can use this workaround to bypass access controls and obtain full administrative access. It works because the server thinks the request comes from a trusted location.<br>
+
+#### SSRF Targeting the Back End 
+Another way that SSRF exploits trust is when an application server can interact with back-end systems that users cannot normally access. These systems typically have a private, non-routable IP address with a weak internal security posture. An unauthorized user can access protected functionality by interacting with a back-end system. <br>
+
+For instance, attackers can exploit administrative interfaces at the back end by submitting a request for the admin URL’s content.
+
+#### Blind SSRF
+Blind SSRF attacks occur when the host server does not return visible data to the attackers. They work by focusing on performing malicious actions rather than accessing sensitive data. An attacker may tamper with user permissions or sensitive files on the server. For instance, the attacker might change the URL for the API call to induce the server to retrieve a large file repeatedly. Eventually, the server could crash, causing a denial of service (DoS). <br>
+
+#### Mitigates
+
+#### Input Validation and Sanitization
+Implementing strict input validation rules can help prevent an attacker from injecting malicious payloads into requests. Sanitizing user inputs by stripping out any potentially harmful characters or patterns can further reduce the risk of SSRF attacks, as it helps ensure that user-supplied data is processed securely and appropriately. <br>
+
+#### Secure URL Parsers and Access Controls
+Implementing a secure URL parser can help prevent an attacker from manipulating URLs to access restricted internal resources. Access controls, on the other hand, ensure that only authorized users and systems can interact with sensitive data and resources. By combining secure URL parsing with robust access controls, you can greatly minimize the potential for SSRF attacks on your web applications.
+
+#### Use allowlists for URLs and IP addresses
+Restrict the range of allowed URLs and IP addresses to minimize the attack surface and prevent unauthorized access to internal resources.
+
+#### Monitoring and Logging
+By implementing real-time monitoring and logging mechanisms, you can identify unusual patterns or signs of SSRF attacks and respond quickly to mitigate the threat. 
+
+#### Regular security testing
+Regular security testing is crucial to identify vulnerabilities in web applications and address them proactively.
+
 ## Literature
 1. [What is API definition](https://www.altexsoft.com/blog/what-is-api-definition-types-specifications-documentation/) 
 2. [OWASP TOP 10 API Security](https://owasp.org/API-Security/editions/2023/en/0x11-t10/)
@@ -376,3 +434,6 @@ Role-Based Access Control: Assign roles and permissions to users, allowing them 
 26. [API6:2023 Unrestricted Access to Sensitive Business Flows](https://owasp.org/API-Security/editions/2023/en/0xa6-unrestricted-access-to-sensitive-business-flows/)
 27. [OWASP Top 10 API security risks: Unrestricted access to sensitive business flows](https://blog.barracuda.com/2023/07/10/owasp-top-10-api-unrestricted-access-senstive-business-flows)
 28. [2023 OWASP Top-10 Series: API6:2023 Unrestricted Access to Sensitive Business Flows](https://lab.wallarm.com/api62023-unrestricted-access-to-sensitive-business-flows/)
+29. [API7:2023 Server Side Request Forgery](https://owasp.org/API-Security/editions/2023/en/0xa7-server-side-request-forgery/)
+30. [Server Side Request Forgery](https://owasp.org/www-community/attacks/Server_Side_Request_Forgery)
+31. [How to Prevent Server-Side Request Forgery](https://www.evolvesecurity.com/blog-posts/how-to-prevent-server-side-request-forgery)
