@@ -47,3 +47,13 @@ a.	Cookies and JavaScript Object Notation (JSON) are both widely used behind the
 •	Prefer the use of random and unpredictable values as GUIDs for records' IDs. By making these IDs random or non-guessable, you can add an extra layer of security to your application and make it harder for attackers to exploit BOLA vulnerabilities.<br>
 •	Implementing API gateways and rate limiting can also help prevent BOLA attacks. An API gateway can serve as a single entry point for all API requests, providing a layer of security by controlling how requests are handled. One of the security features provided by API gateways is rate limiting. This can prevent attackers from making too many requests in a short period, which is often a sign of a BOLA attack. By limiting the number of requests a user can make, you can slow down an attacker and potentially prevent a data breach. <br>
 •	Write tests to evaluate the vulnerability of the authorization mechanism. Do not deploy changes that make the tests fail.
+
+## Literature
+1. [What is API definition](https://www.altexsoft.com/blog/what-is-api-definition-types-specifications-documentation/) 
+2. [OWASP TOP 10 API Security](https://owasp.org/API-Security/editions/2023/en/0x11-t10/)
+3. [Insecure direct object reference](https://en.wikipedia.org/wiki/Insecure_direct_object_reference)
+4. [Broken object-level authorization - BOLA](https://www.imperva.com/learn/application-security/broken-object-level-authorization-bola/)
+5. [A deep dive on the most critical API vulnerability - BOLA](https://www.traceable.ai/blog-post/a-deep-dive-on-the-most-critical-api-vulnerability-bola-broken-object-level-authorization) 
+6. [What is IDOR](https://www.varonis.com/blog/what-is-idor-insecure-direct-object-reference)
+7. [Application security - BOLA](https://www.imperva.com/learn/application-security/broken-object-level-authorization-bola/) 
+8. [OWASP TOP 10 API Security - BOLA](https://owasp.org/API-Security/editions/2023/en/0xa1-broken-object-level-authorization/) 
