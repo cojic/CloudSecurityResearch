@@ -380,6 +380,8 @@ Role-Based Access Control: Assign roles and permissions to users, allowing them 
 • Using encryption can help protect the communication between two parties from being intercepted and read by an attacker. This can include using HTTPS for web browsing, VPN for remote connections, and SSL or TLS for email.
 
 ### API7: 2023 Server-Side Request Forgery
+<img width="1594" alt="Untitled (7)" src="https://github.com/cojic/CloudSecurityResearch/assets/102799668/3e5efa0e-6c06-4484-9e74-9d3ec0dbe15e">
+
 
 #### What is it?
 Server-side request forgery (SSRF) is a vulnerability that lets a malicious hacker send a request from the back end of the software to another server or a local service. The server or service that receives that request believes that the request came from the application and is legitimate. <br>
@@ -438,6 +440,15 @@ By implementing real-time monitoring and logging mechanisms, you can identify un
 #### Regular security testing
 Regular security testing is crucial to identify vulnerabilities in web applications and address them proactively.
 
+#### Perform allowlist checks
+You should perform allowlist validation on IP addresses and DNS names to which your application requires access. That way, an attacker won’t be able to redirect requests to unauthorized locations.
+
+#### Network Segmentation
+Implement strong network segmentation to restrict communication between different parts of the system. This can prevent attackers from reaching sensitive backend systems even if they manage to exploit an SSRF vulnerability.
+
+##### Reverse Proxy and Gateway
+Implement a reverse proxy that validates and filters outgoing requests, blocking requests to unauthorized or sensitive endpoints.
+Gateway Protection: Use gateway protection mechanisms to monitor outgoing requests for suspicious patterns, preventing SSRF attempts.
 
 ### API8: 2023 Security misconfiguration
 
