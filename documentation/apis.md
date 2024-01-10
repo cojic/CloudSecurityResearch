@@ -385,7 +385,8 @@ Role-Based Access Control: Assign roles and permissions to users, allowing them 
 • Using encryption can help protect the communication between two parties from being intercepted and read by an attacker. This can include using HTTPS for web browsing, VPN for remote connections, and SSL or TLS for email.
 
 ### API7: 2023 Server-Side Request Forgery
-<img width="1594" alt="Untitled (7)" src="https://github.com/cojic/CloudSecurityResearch/assets/102799668/3e5efa0e-6c06-4484-9e74-9d3ec0dbe15e">
+<img width="1810" alt="Untitled (17)" src="https://github.com/cojic/CloudSecurityResearch/assets/102799668/660505ad-da09-4be7-9237-90d2facfe0f9">
+
 
 
 #### What is it?
