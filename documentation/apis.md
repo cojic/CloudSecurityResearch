@@ -586,7 +586,15 @@ This type of attack has created significant problems for companies. By identifyi
 #### Attack scenarios
 
 #### Mittigates
+To mitigate the risks associated with unsafe API consumption, organizations should adopt the following strategies: <br>
 
+• Implement Strong Authentication and Authorization Mechanisms: APIs should enforce secure authentication protocols, such as OAuth or JSON Web Tokens (JWT), and rigorously validate user permissions before granting access to sensitive data or functionality. <br>
+• Perform Input Validation and Sanitization: All user-supplied input should be thoroughly validated and sanitized to prevent injection attacks and other malicious input. This includes validating data types, length, format, and encoding. <br>
+• Use Secure Communication Protocols: APIs should always employ secure communication channels, such as HTTPS, to encrypt data in transit and protect against eavesdropping and data interception. <br>
+• Implement Access Controls and Secure Object References: APIs must enforce proper access controls to ensure clients can only access authorized resources. Additionally, internal object references should be abstracted or obfuscated to prevent direct manipulation by clients. <br>
+• Regularly Update and Patch APIs: Keeping APIs up to date with the latest security patches and updates is crucial to address any known vulnerabilities promptly. <br>
+• Conduct Security Testing and Code Reviews: Regular security testing, including penetration testing and code reviews, is vital for identifying and addressing any security weaknesses or vulnerabilities in the API implementation. <be>
+By following these mitigation strategies, organizations can significantly reduce the risk of unsafe API consumption and enhance the overall security of their systems.
 
 
 ## Literature
@@ -629,3 +637,6 @@ This type of attack has created significant problems for companies. By identifyi
 37. [Improper Inventory Management](https://salt.security/blog/api9-2023-improper-assets-management)
 38. [Improper Assets Management](https://www.traceable.ai/owasp-api/improper-assets-management)
 39. [OWASP API Top Ten Deep Dive Part 5](https://www.wwt.com/blog/owasp-api-top-ten-deep-dive-part-5)
+40. [OWASP Top 10 API Security Risks – 2023](https://equixly.com/blog/2023/11/28/owasp-api-security-top-10/)
+41. [OWASP Top 10 API security risks: Unsafe consumption of APIs](https://blog.barracuda.com/2023/08/16/owasp-top-10-api-unsafe-consumption-apis)
+42. [OWASP API 10: Unsafe Consumption of APIs](https://aspiainfotech.com/2023/12/01/unsafe-consumption-of-apis-owasp-api/)
