@@ -7,7 +7,7 @@ The working principle of an API is commonly expressed through the request-respon
 With the transition to cloud environments, APIs become more accessible. This transformation brings easier access to users but also increases exposure to threats and risks, requiring a special focus on security and data protection. The following text discusses the 2023 list of OWASP API vulnerabilities 
 
 
-### BROKEN OBJECT-LEVEL AUTHORIZATION (BOLA)
+### API1:2023 BROKEN OBJECT-LEVEL AUTHORIZATION
 The OWASP list of top 10 API vulnerabilities identifies Broken Object Level Authorization (BOLA) as the number one vulnerability. Almost every company has APIs that are vulnerable to BOLA and there are currently no direct solutions to mitigate this vulnerability (depending on business logic). 
 Insecure Direct Object Reference (IDOR) and BOLA are the same thing. The name was changed from IDOR to BOLA as part of the project.
 
@@ -46,7 +46,7 @@ a.	Cookies and JavaScript Object Notation (JSON) are both widely used behind the
 •	Implementing API gateways and rate limiting can also help prevent BOLA attacks. An API gateway can serve as a single entry point for all API requests, providing a layer of security by controlling how requests are handled. One of the security features provided by API gateways is rate limiting. This can prevent attackers from making too many requests in a short period, which is often a sign of a BOLA attack. By limiting the number of requests a user can make, you can slow down an attacker and potentially prevent a data breach. <br>
 •	Write tests to evaluate the vulnerability of the authorization mechanism. Do not deploy changes that make the tests fail.
 
-### Broken Authentication
+### API2: 2023 Broken Authentication
 
 #### What is it?
 Broken Authentication is a security vulnerability that occurs when the authentication of a web application is  flawed or improperly implemented.
@@ -136,7 +136,7 @@ The following are the ways of preventing broken authentication attacks:
 5.	Generating new random session IDs with high entropy after login protects against hackers. Remember, those session IDs should not be present in the URL and invalidated after logout.
 
 
-### Broken Object Property Level Authorization
+### API3: 2023 Broken Object Property Level Authorization
 
 #### What is it?
 Broken Object Property Level Authorization is a significant vulnerability that can lead to unauthorized access, data breaches, and other detrimental impacts.
@@ -182,7 +182,7 @@ Implement a schema-based response validation mechanism to enforce the expected d
 Keep the returned data structures to the minimum required by the business or functional requirements of the endpoint. Avoid exposing unnecessary information that could pose security risks.
 
 
-### Unrestricted resource consumption 
+### API4: 2023 Unrestricted resource consumption 
 
 #### What is it?
 Unrestricted resource consumption is a frequently overlooked API vulnerability. API requests consume resources such as network, CPU, memory, and storage. When there are no restrictions on the number, content, or type of requests made by users, an attacker can exploit this vulnerability, impacting the APIs' availability and service rate. The following describes some of the techniques attackers can use:
@@ -234,7 +234,7 @@ Attackers, often hard to identify, exploit the infected botnets for various atta
 • Add proper server-side validation for query string and request body parameters, specifically, the one that controls the number of records to be returned in the response. <br>
 • Configure spending limits for all service providers/API integrations. When setting spending limits is not possible, billing alerts should be configured instead. <br>
 
-### Broken Function Level Authorization
+### API5: 2023 Broken Function Level Authorization
 
 #### What is it?
 Function level authorization is a security mechanism used in software applications and APIs to control access to specific functions or actions based on the user’s level of privilege or authorization. 
@@ -280,7 +280,7 @@ Your application should have a consistent and easy-to-analyze authorization modu
 • Make sure that administrative functions inside a regular controller implement authorization checks based on the user's group and role. <br>
 • Implement zero trust policies. 
 
-### Unrestricted Access to Sensitive Business Flows
+### API6: 2023 Unrestricted Access to Sensitive Business Flows
 
 #### What is it?
 Unrestricted Access to Sensitive Business Flows involves exploitation of the business model behind the application. In these vulnerabilities, the API facilitates an unexpected and unwanted business flow. Most commonly, exploitation of this class of vulnerabilities might be called API Abuse or be associated with malicious bot traffic. 
@@ -346,7 +346,7 @@ Role-Based Access Control: Assign roles and permissions to users, allowing them 
 • Logging and Monitoring: Maintain detailed logs of API access and monitor for any suspicious activity. Anomalies can be detected and addressed promptly. <br>
 • Regular Security Testing: Conduct regular security assessments, including penetration testing and code reviews, to identify and fix vulnerabilities. <br>
 
-### Server Side Request Forgery
+### API7: 2023 Server Side Request Forgery
 
 #### What is it?
 Server-side request forgery (SSRF) is a vulnerability that lets a malicious hacker send a request from the back end of the software to another server or a local service. The server or service that receives that request believes that the request came from the application and is legitimate. <br>
@@ -406,7 +406,7 @@ By implementing real-time monitoring and logging mechanisms, you can identify un
 Regular security testing is crucial to identify vulnerabilities in web applications and address them proactively.
 
 
-### Security misconfiguration
+### API8: 2023 Security misconfiguration
 
 #### What is it?
 Security misconfigurations are the errors and oversights made during an API’s configuration, implementation, or maintenance that can lead to security vulnerabilities. This happens when developers/ IT teams have not followed security best practices in implementing and configuring APIs. <br>
@@ -461,7 +461,7 @@ Security misconfiguration attacks are hackers’ favorites because they can be e
 
 Attackers can abuse your application’s structure and modify software components. This attack type is hard to control if your app is delivered to mobile devices because your business and presentation layers are deployed on a device, not a server. <br>
 
-Some of the attacks types are:
+Some of the attack types are:
 
 #### Brute force attacks
 The impact of not implementing a secure password policy is that bad actors will use brute force attacks to gain unauthorized access to your system. They will run a series of standard usernames and passwords until they will successfully authenticate in your application.  
@@ -506,7 +506,7 @@ Other best practices to prevent security misconfiguration attacks are: <br>
 • Do not allow debugging tools to access the server or display internal errors publicly <br>
 • Ensure that you update all your packages and libraries <br>
 
-### Improper Inventory Management
+### API9: 2023 Improper Inventory Management
 
 #### What is it?
 Maintaining a complete, up-to-date API inventory with accurate documentation is critical to understanding potential exposure and risk. An outdated or incomplete inventory results in unknown gaps in the API attack surface and makes it difficult to identify older versions of APIs that should be decommissioned. Similarly, inaccurate documentation results in risks such as unknown exposure of sensitive data and makes it difficult to identify vulnerabilities that need to be remediated.
@@ -544,10 +544,33 @@ API endpoints are known to exist but API documentation is missing many parameter
 In addition to many missing parameters, data types that lack needed details such as “String” instead of “UUID” or “DateTime” will leave APIs vulnerable. Message filters used by traditional security controls will allow any input through the API to be processed by the backend. These controls rely on a positive security approach and explicitly written rules and policies when enforcing requests against API schema definitions.
 
 #### Attack scenarios
+Attacks targeting this vulnerability might exploit flaws in inventory tracking, mismanagement of resources, or improper handling of inventory-related data via APIs.
+
+• API Abuse: Attackers exploit APIs to manipulate inventory data, including adding or removing items, altering quantities, or causing inconsistencies in the inventory system.
+
+• Parameter Manipulation: Hackers might attempt to manipulate parameters within API requests to trick the system into displaying incorrect inventory levels or granting unauthorized access to inventory data.
+
+• Injection Attacks: This could involve injecting malicious code or malformed input into API requests to disrupt inventory management systems, potentially causing data corruption or system failure.
+
+• Denial of Service (DoS) Attacks: Floods of requests through APIs can overwhelm the inventory management system, causing it to become unresponsive or crash, disrupting business operations.
+
+• Data Exfiltration: Exploiting vulnerabilities in inventory APIs could allow attackers to steal sensitive inventory data, such as product details, pricing, or customer information.
+
+• Tampering with Inventory Records: Manipulating inventory records through API vulnerabilities can result in incorrect stock levels, leading to financial loss, customer dissatisfaction, or incorrect business decisions.
 
 #### Mitigates
+Proper management involves the deletion of unused assets, adherence to OWASP guidelines, a robust upgrade and rollout strategy, and regular security maintenance throughout the API lifecycle.
 
-### Unsafe Consumption of APIs
+#### Avoiding Improper Asset Management
+• Delete Unused APIs: Remove APIs that aren’t in use to prevent forgotten, unpatched vulnerabilities. <br>
+• OWASP Recommendations: Follow OWASP guidelines, including:
+  - **Inventory Management:** Maintain a comprehensive list of APIs with version, access, environment, and lifecycle details.
+  - **Integrated Services:** Understand data flow, access, sensitivity, and role within the API system.
+- **Upgrade Strategy:** Perform risk analysis for newer versions, considering security improvements and backward compatibility.
+- **API Rollout Strategy:** Develop a documented strategy covering the entire API lifecycle, including retirement.
+- **Regular Security Patches:** Apply updates and security patches consistently to prevent vulnerabilities.
+  
+### API10: 2023 Unsafe Consumption of APIs
 
 #### What is it?
 This vulnerability means an API integrates with third-party APIs and services that can endanger it. For instance, if developers use weaker security standards for third-party APIs, threat actors can get to the target API by compromising those other APIs first. Third-party services may allow them to bypass authentication and manipulate API responses.
@@ -604,4 +627,5 @@ This type of attack has created significant problems for companies. By identifyi
 35. [The Impact of Security Misconfiguration and How to Avoid It?](https://www.flowmatters.com/blog/the-impact-of-security-misconfiguration-and-how-to-avoid-it/)
 36. [API9:2023 Improper Inventory Management](https://owasp.org/API-Security/editions/2023/en/0xa9-improper-inventory-management/)
 37. [Improper Inventory Management](https://salt.security/blog/api9-2023-improper-assets-management)
-
+38. [Improper Assets Management](https://www.traceable.ai/owasp-api/improper-assets-management)
+39. [OWASP API Top Ten Deep Dive Part 5](https://www.wwt.com/blog/owasp-api-top-ten-deep-dive-part-5)
