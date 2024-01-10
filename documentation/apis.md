@@ -457,6 +457,24 @@ Out-of-the-box settings are typically configured to provide a good user experien
 <br>
 
 #### Attacks scenarios
+Security misconfiguration attacks are hackers’ favorites because they can be easily exploited using automated tools. Cloud-native applications are a popular target. <br>
+
+Attackers can abuse your application’s structure and modify software components. This attack type is hard to control if your app is delivered to mobile devices because your business and presentation layers are deployed on a device, not a server. <br>
+
+Some of the attacks types are:
+
+#### Brute force attacks
+The impact of not implementing a secure password policy is that bad actors will use brute force attacks to gain unauthorized access to your system. They will run a series of standard usernames and passwords until they will successfully authenticate in your application.  
+
+#### Code injection attacks
+The impact of bad code and deficient coding practices open the door for code injection attacks. The inadequate coding techniques, such as a lack of precise input and output data validation, will leave your application vulnerable to security misconfiguration attacks. <br>
+
+The impact of your software being out of date or flaws not being fixed will allow hackers to use code injection attacks to inject malicious code. The patch management process is mandatory to avoid any injection techniques and prevent your application from executing any wicked lines of code. <br>
+
+The impact of installing or enabling unused features increases your application security risks of misconfiguration and vulnerabilities. If you do not remove unnecessary features, samples, documentation, and components, you allow attackers to inject malicious code through the code injection technique. 
+
+#### Directory traversal attacks
+The impact of lack of security hardening on directory listing will allow attackers to access your directories, files, and commands outside the root directory. These are common issues, especially for web applications built on off-the-shelf frameworks such as WordPress. Cybercriminals can access your app’s source code, app configurations, and system files. They can also modify URLs making your app execute and deliver random files on the server. Devices and apps that have HTTP-based interfaces are a possible target of directory traversal attacks. 
 
 #### Mitigates
 ![image](https://github.com/cojic/CloudSecurityResearch/assets/102799668/24aea0d1-56e3-43b6-9a3f-3321599a0b4b)
@@ -487,6 +505,66 @@ Other best practices to prevent security misconfiguration attacks are: <br>
 • Avoid enabling directory browsing and turn off non-essential functionalities <br>
 • Do not allow debugging tools to access the server or display internal errors publicly <br>
 • Ensure that you update all your packages and libraries <br>
+
+### Improper Inventory Management
+
+#### What is it?
+Maintaining a complete, up-to-date API inventory with accurate documentation is critical to understanding potential exposure and risk. An outdated or incomplete inventory results in unknown gaps in the API attack surface and makes it difficult to identify older versions of APIs that should be decommissioned. Similarly, inaccurate documentation results in risks such as unknown exposure of sensitive data and makes it difficult to identify vulnerabilities that need to be remediated.
+<br>
+Unknown APIs, referred to as shadow APIs, and forgotten APIs, referred to as zombie APIs, are typically not monitored or protected by security tools. Even known API endpoints may have unknown or undocumented functionality, referred to as shadow parameters. As a result, these APIs and the infrastructure that serves them are often unpatched and vulnerable to attacks.
+
+#### How does it happen?
+Running multiple versions of an API requires additional management resources from the API provider and expands the attack surface.
+An API has a "documentation blindspot" if: <br>
+• The purpose of an API host is unclear, and there are no explicit answers to the following questions. <br>
+• It depends on which environment is the API running in (e.g. production, staging, test, development). <br>
+• It is not clear who should have network access to the API (e.g. public, internal, partners), <br>
+• There is no clear knowledge of which API version is running <br>
+• There is no documentation or the existing documentation is not updated. <br>
+• There is no retirement plan for each API version. <br>
+• The host's inventory is missing or outdated. <br>
+
+The visibility and inventory of sensitive data flows play an important role as part of an incident response plan, in case a breach happens on the third-party side.
+An API has a "data flow blindspot" if: <br>
+• There is a "sensitive data flow" where the API shares sensitive data with a third party. <br>
+• There is no business justification or approval of the flow. <br>
+• There is no inventory or visibility of the flow. <br>
+• There is no deep visibility of which type of sensitive data is shared. <br>
+
+ Also, there is research conducted between manually created API documentation (or schema definitions) in the form of Open API Specification (OAS) vs. what is deployed in production APIs. 
+ <br> These gaps fall into the following three categories: Shadow API Endpoints, Shadow Parameters, and Parameter Definition Discrepancies.
+ 
+#### Shadow API Endpoints 
+API endpoints that are missing from the OAS or have no OAS at all. This sensitive data sharing may be intentional as part of the design or necessary for functionality. As a result, organizations augment with additional security controls such as stronger authentication or encrypted transport to ensure the data is sufficiently protected. In the example, you can see additional HTTP security headers to help protect the data, such as x-frame-options for mitigating cross-frame scripting attacks and x-xss-protection for mitigating cross-site scripting attacks. Some organizations may also mask data being returned to a client to avoid cases where someone intercepts traffic or views data outside of the intended client application. Relying on the client-side code to filter or obscure such sensitive data is typically not appropriate since attackers regularly bypass client-side web application and mobile application codes and call APIs directly.
+
+#### Shadow Parameters
+API endpoints are known to exist but API documentation is missing many parameters. As a result, the API documentation does not cover most of the attack surface.
+
+#### Parameter Definition Discrepancies 
+In addition to many missing parameters, data types that lack needed details such as “String” instead of “UUID” or “DateTime” will leave APIs vulnerable. Message filters used by traditional security controls will allow any input through the API to be processed by the backend. These controls rely on a positive security approach and explicitly written rules and policies when enforcing requests against API schema definitions.
+
+#### Attack scenarios
+
+#### Mitigates
+
+### Unsafe Consumption of APIs
+
+#### What is it?
+This vulnerability means an API integrates with third-party APIs and services that can endanger it. For instance, if developers use weaker security standards for third-party APIs, threat actors can get to the target API by compromising those other APIs first. Third-party services may allow them to bypass authentication and manipulate API responses.
+<br>
+This type of attack has created significant problems for companies. By identifying and compromising other APIs or services that your APIs interact with, attackers may gain access to your systems. These attacks can be somewhat difficult to detect immediately as traffic through the third party may appear to be authorized and authenticated, so even if you have robust security controls and alerts in place, you may not get flagged unless attackers then try to access unauthorized areas.
+<br>
+![image](https://github.com/cojic/CloudSecurityResearch/assets/102799668/d971d634-466b-4002-a8e1-1bcf08b7677f)
+
+<br>
+
+#### How does it happen?
+
+#### Attack scenarios
+
+#### Mittigates
+
+
 
 ## Literature
 1. [What is API definition](https://www.altexsoft.com/blog/what-is-api-definition-types-specifications-documentation/) 
@@ -523,3 +601,7 @@ Other best practices to prevent security misconfiguration attacks are: <br>
 32. [API8:2023 Security Misconfiguration](https://owasp.org/API-Security/editions/2023/en/0xa8-security-misconfiguration/)
 33. [Security Misconfiguration: Impact, Examples and Prevention](https://www.balbix.com/insights/security-misconfiguration-impact-examples-and-prevention/)
 34. [Security Misconfiguration: Types, Examples & Prevention Tips](https://www.aquasec.com/cloud-native-academy/supply-chain-security/security-misconfigurations/)
+35. [The Impact of Security Misconfiguration and How to Avoid It?](https://www.flowmatters.com/blog/the-impact-of-security-misconfiguration-and-how-to-avoid-it/)
+36. [API9:2023 Improper Inventory Management](https://owasp.org/API-Security/editions/2023/en/0xa9-improper-inventory-management/)
+37. [Improper Inventory Management](https://salt.security/blog/api9-2023-improper-assets-management)
+
