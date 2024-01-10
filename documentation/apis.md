@@ -53,7 +53,8 @@ There are four different types of BOLA attacks:
 
 ### API2: 2023 Broken Authentication
 <br>
-<img width="1289" alt="Untitled (1)" src="https://github.com/cojic/CloudSecurityResearch/assets/102799668/bb624656-6941-40e2-9220-24dc5d5aecf6">
+<img width="1914" alt="Untitled (11)" src="https://github.com/cojic/CloudSecurityResearch/assets/102799668/1e14e02d-b887-4e31-b76b-ae23c128d6e2">
+
 <br>
 
 #### What is it?
