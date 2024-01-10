@@ -311,6 +311,8 @@ Your application should have a consistent and easy-to-analyze authorization modu
 • Implement security headers such as Content-Security-Policy (CSP) and Strict-Transport-Security (HSTS) to provide an additional layer of protection against HTTP Verb Tampering and other web vulnerabilities.
 
 ### API6: 2023 Unrestricted Access to Sensitive Business Flows
+<img width="1632" alt="Untitled (6)" src="https://github.com/cojic/CloudSecurityResearch/assets/102799668/4243c4e4-69eb-4bfa-910b-ef2244d52204">
+
 
 #### What is it?
 Unrestricted Access to Sensitive Business Flows involves exploitation of the business model behind the application. In these vulnerabilities, the API facilitates an unexpected and unwanted business flow. Most commonly, exploitation of this class of vulnerabilities might be called API Abuse or be associated with malicious bot traffic. 
@@ -375,8 +377,9 @@ Role-Based Access Control: Assign roles and permissions to users, allowing them 
 • Rate Limiting: Implement rate limiting to prevent abuse and brute force attacks on APIs. <br>
 • Logging and Monitoring: Maintain detailed logs of API access and monitor for any suspicious activity. Anomalies can be detected and addressed promptly. <br>
 • Regular Security Testing: Conduct regular security assessments, including penetration testing and code reviews, to identify and fix vulnerabilities. <br>
+• Using encryption can help protect the communication between two parties from being intercepted and read by an attacker. This can include using HTTPS for web browsing, VPN for remote connections, and SSL or TLS for email.
 
-### API7: 2023 Server Side Request Forgery
+### API7: 2023 Server-Side Request Forgery
 
 #### What is it?
 Server-side request forgery (SSRF) is a vulnerability that lets a malicious hacker send a request from the back end of the software to another server or a local service. The server or service that receives that request believes that the request came from the application and is legitimate. <br>
