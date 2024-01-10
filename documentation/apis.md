@@ -615,6 +615,8 @@ Proper management involves the deletion of unused assets, adherence to OWASP gui
 - **Upgrade Strategy:** Perform risk analysis for newer versions, considering security improvements and backward compatibility.
 - **API Rollout Strategy:** Develop a documented strategy covering the entire API lifecycle, including retirement.
 - **Regular Security Patches:** Apply updates and security patches consistently to prevent vulnerabilities.
+- **Logging and monitoring: Monitor the volume and frequency of data transmission by your users over email and other organizational messaging tools. 
+
   
 ### API10: 2023 Unsafe Consumption of APIs
 
