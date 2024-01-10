@@ -29,7 +29,7 @@ Some of the main reasons for BOLA vulnerability:
 3.	Incorrectly configured permissions for user roles
 4.	Lack of context-aware authorization when granting access
 
-#### Attack scenarios
+#### Attacks
 There are four different types of BOLA attacks:
 1.	URL tampering
 a.	URL tampering is the simplest way to exploit a BOLA vulnerability and often requires little or no technical expertise. In this type of attack, we can simply change the value of a parameter in our web browser’s address bar. 
@@ -73,7 +73,7 @@ The following points list the scenarios that can cause broken authentication.
 •	Consumer identity details aren't protected when stored.
 •	Consumer identity details are transferred over unencrypted connections.
 
-#### Attack scenarios
+#### Attacks
 
 #### Broad-based phishing campaigns
 ![image](https://github.com/cojic/CloudSecurityResearch/assets/102799668/914a36c9-f2c1-41a3-b9d2-997714d4bee8)
@@ -151,7 +151,7 @@ Broken Object Property Level Authorization vulnerabilities occur when authorizat
 APIs often overshare information in their responses, leaving it to the client to filter. This can expose sensitive data to attackers who intercept the traffic, potentially accessing private information like account numbers, emails, and access tokens. Additionally, attackers exploiting this vulnerability might modify object properties, leading to privilege escalation, data tampering, and bypassing security measures.<br>
 Therefore, traditional security controls like Web Application Firewalls (WAFs) and API gateways lack contextual understanding of API activity and business logic. They struggle to identify sensitive data transmitted via APIs and fail to assess the risk exposure of the data. While they can employ basic message filtering using regular expressions to detect predefined sensitive data types, they cannot comprehend the API's context and specific business logic flow. 
 
-#### Attack scenario
+#### Attacks
 The example below shows submitting a POST request to an API to retrieve stored information.   <br>
 ![image](https://github.com/cojic/CloudSecurityResearch/assets/102799668/8954ebf6-d352-424c-ab83-51d42cbd69fc) <br>
 
@@ -199,7 +199,7 @@ Unrestricted resource consumption is rooted in security weaknesses that exist in
 • Inadequate rate limiting: APIs often lack effective rate-limiting mechanisms to control the frequency of client interactions. Without rate limits, attackers can bombard the API with a high volume of requests, leading to resource exhaustion. <br>
 • Poor query string and request body validation: APIs may not implement thorough validation for query string and request body parameters. Attackers can manipulate these parameters to control the number of records returned in the API response, leading to excessive resource consumption. <br> 
 
-#### Attack scenarios
+#### Attacks
 
 #### Denial-of-Service Attack
 A very popular example of an attack that exploits this vulnerability is distributed denial-of-service (DDoS) attacks targeting APIs. 
@@ -292,7 +292,7 @@ Some of the main reasons this vulnerability occurs:<br>
 • Excessive Functionality: The API doesn't properly restrict or control certain functionalities, allowing them to be used in unintended or excessive ways.<br>
 • Exploiting Gaps in Business Logic: Attackers exploit these gaps by repeatedly using specific API endpoints or methods in ways that the system doesn't expect or intend.<br>
 
-#### Attack scenarios
+#### Attacks
 
 Each type of the following attacks targets weaknesses within the API's design, implementation, or usage.
 
@@ -366,7 +366,7 @@ More common - the following concepts encourage developers to access an external 
 
 More dangerous - Modern technologies like cloud providers, Kubernetes, and Docker expose management and control channels over HTTP on predictable, well-known paths. Those channels are an easy target for an SSRF attack.<br>
 
-#### Attacks scenarios
+#### Attacks
 
 In a Server-Side Request Forgery (SSRF) attack, the attacker can abuse functionality on the server to read or update internal resources. The attacker can supply or modify a URL to which the code running on the server will read or submit data, and by carefully selecting the URLs, the attacker may be able to read server configuration such as AWS metadata, connect to internal services like HTTP enabled databases or perform post requests towards internal services which are not intended to be exposed.
 
@@ -456,7 +456,7 @@ Security tool misconfigurations could occur if a user does not install the lates
 Out-of-the-box settings are typically configured to provide a good user experience. However, leaving out-of-the-box settings unchanged can also sometimes allow them to be easily exploited. Attackers can take advantage of default passwords, ports that are open by default, or unused user accounts.
 <br>
 
-#### Attacks scenarios
+#### Attacks
 Security misconfiguration attacks are hackers’ favorites because they can be easily exploited using automated tools. Cloud-native applications are a popular target. <br>
 
 Attackers can abuse your application’s structure and modify software components. This attack type is hard to control if your app is delivered to mobile devices because your business and presentation layers are deployed on a device, not a server. <br>
@@ -543,7 +543,7 @@ API endpoints are known to exist but API documentation is missing many parameter
 #### Parameter Definition Discrepancies 
 In addition to many missing parameters, data types that lack needed details such as “String” instead of “UUID” or “DateTime” will leave APIs vulnerable. Message filters used by traditional security controls will allow any input through the API to be processed by the backend. These controls rely on a positive security approach and explicitly written rules and policies when enforcing requests against API schema definitions.
 
-#### Attack scenarios
+#### Attacks
 Attacks targeting this vulnerability might exploit flaws in inventory tracking, mismanagement of resources, or improper handling of inventory-related data via APIs.
 
 • API Abuse: Attackers exploit APIs to manipulate inventory data, including adding or removing items, altering quantities, or causing inconsistencies in the inventory system.
@@ -582,8 +582,19 @@ This type of attack has created significant problems for companies. By identifyi
 <br>
 
 #### How does it happen?
+Developers tend to trust data received from third-party APIs more than user input. This is especially true for APIs offered by well-known companies. Because of that, developers tend to adopt weaker security standards, for instance, regarding input validation and sanitization. <br>
 
-#### Attack scenarios
+The API might be vulnerable if: <br>
+
+• Interacts with other APIs over an unencrypted channel; <br>
+• Does not properly validate and sanitize data gathered from other APIs before processing it or passing it to downstream components; <br>
+• Blindly follows redirections; <br>
+• Does not limit the number of resources available to process third-party service responses; <br>
+• Does not implement timeouts for interactions with third-party services; <br>
+
+#### Attacks
+Common examples of API attacks include MITM attacks, where an attacker intercepts and alters the communication between two systems; injection attacks, where malicious data is inserted to exploit a system vulnerability; and DDoS attacks, where an overwhelming amount of traffic is directed toward an API to disrupt service.
+
 
 #### Mittigates
 To mitigate the risks associated with unsafe API consumption, organizations should adopt the following strategies: <br>
@@ -640,3 +651,5 @@ By following these mitigation strategies, organizations can significantly reduce
 40. [OWASP Top 10 API Security Risks – 2023](https://equixly.com/blog/2023/11/28/owasp-api-security-top-10/)
 41. [OWASP Top 10 API security risks: Unsafe consumption of APIs](https://blog.barracuda.com/2023/08/16/owasp-top-10-api-unsafe-consumption-apis)
 42. [OWASP API 10: Unsafe Consumption of APIs](https://aspiainfotech.com/2023/12/01/unsafe-consumption-of-apis-owasp-api/)
+43. [Unsafe Consumption of APIs](https://owasp.org/API-Security/editions/2023/en/0xaa-unsafe-consumption-of-apis/)
+44. [What Are API Security Risks?](https://www.akamai.com/glossary/what-are-api-security-risks)
