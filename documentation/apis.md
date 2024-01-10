@@ -316,7 +316,7 @@ Your application should have a consistent and easy-to-analyze authorization modu
 • Implement security headers such as Content-Security-Policy (CSP) and Strict-Transport-Security (HSTS) to provide an additional layer of protection against HTTP Verb Tampering and other web vulnerabilities.
 
 ### API6: 2023 Unrestricted Access to Sensitive Business Flows
-<img width="1632" alt="Untitled (6)" src="https://github.com/cojic/CloudSecurityResearch/assets/102799668/4243c4e4-69eb-4bfa-910b-ef2244d52204">
+<img width="1856" alt="Untitled (16)" src="https://github.com/cojic/CloudSecurityResearch/assets/102799668/96a5f116-8808-481a-beb2-7b0503af7ac3">
 
 
 #### What is it?
