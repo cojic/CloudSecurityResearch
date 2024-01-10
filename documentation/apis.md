@@ -11,7 +11,8 @@ With the transition to cloud environments, APIs become more accessible. This tra
 The OWASP list of top 10 API vulnerabilities identifies Broken Object Level Authorization (BOLA) as the number one vulnerability. Almost every company has APIs that are vulnerable to BOLA and there are currently no direct solutions to mitigate this vulnerability (depending on business logic). 
 Insecure Direct Object Reference (IDOR) and BOLA are the same thing. The name was changed from IDOR to BOLA as part of the project.
 <br>
-<img width="2288" alt="Untitled" src="https://github.com/cojic/CloudSecurityResearch/assets/102799668/536844ef-dfcb-42d0-980b-f84ca653fa72">
+<img width="2375" alt="Untitled (10)" src="https://github.com/cojic/CloudSecurityResearch/assets/102799668/8391a29b-1b68-40e5-a745-b1e8b0f62254">
+
 <br>
 
 #### What is it?
