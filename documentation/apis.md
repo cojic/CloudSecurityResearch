@@ -146,7 +146,8 @@ The following are the ways of preventing broken authentication attacks:
 
 ### API3: 2023 Broken Object Property Level Authorization
 <img width="1360" alt="Untitled (2)" src="https://github.com/cojic/CloudSecurityResearch/assets/102799668/89cd9328-cfc0-4fd7-847a-34f441b2ab7f">
-<br>
+
+
 #### What is it?
 Broken Object Property Level Authorization is a significant vulnerability that can lead to unauthorized access, data breaches, and other detrimental impacts.
 This new category deals with object properties level authorization, of individual property as opposed to BOLA.
