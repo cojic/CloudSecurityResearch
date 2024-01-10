@@ -553,6 +553,8 @@ Other best practices to prevent security misconfiguration attacks are: <br>
 • Ensure that you update all your packages and libraries <br>
 
 ### API9: 2023 Improper Inventory Management
+<img width="1760" alt="Untitled (9)" src="https://github.com/cojic/CloudSecurityResearch/assets/102799668/79eddba1-6fdb-4dca-b099-f09fc831e517">
+
 
 #### What is it?
 Maintaining a complete, up-to-date API inventory with accurate documentation is critical to understanding potential exposure and risk. An outdated or incomplete inventory results in unknown gaps in the API attack surface and makes it difficult to identify older versions of APIs that should be decommissioned. Similarly, inaccurate documentation results in risks such as unknown exposure of sensitive data and makes it difficult to identify vulnerabilities that need to be remediated.
@@ -615,7 +617,7 @@ Proper management involves the deletion of unused assets, adherence to OWASP gui
 - **Upgrade Strategy:** Perform risk analysis for newer versions, considering security improvements and backward compatibility.
 - **API Rollout Strategy:** Develop a documented strategy covering the entire API lifecycle, including retirement.
 - **Regular Security Patches:** Apply updates and security patches consistently to prevent vulnerabilities.
-- **Logging and monitoring: Monitor the volume and frequency of data transmission by your users over email and other organizational messaging tools. 
+- **Logging and monitoring:** Monitor the volume and frequency of data transmission by your users over email and other organizational messaging tools. 
 
   
 ### API10: 2023 Unsafe Consumption of APIs
