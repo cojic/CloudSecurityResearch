@@ -260,6 +260,8 @@ This increase causes the application to return an excessive number of items in r
 • Configure spending limits for all service providers/API integrations. When setting spending limits is not possible, billing alerts should be configured instead. <br>
 
 ### API5: 2023 Broken Function Level Authorization
+<img width="1252" alt="Untitled (5)" src="https://github.com/cojic/CloudSecurityResearch/assets/102799668/427d1654-340f-46f4-aec2-54760b59c559">
+
 
 #### What is it?
 Function level authorization is a security mechanism used in software applications and APIs to control access to specific functions or actions based on the user’s level of privilege or authorization. 
@@ -303,7 +305,10 @@ Your application should have a consistent and easy-to-analyze authorization modu
 • Review your API endpoints against function-level authorization flaws, while keeping in mind the business logic of the application and group hierarchy. <br>
 • Make sure that all of your administrative controllers inherit from an administrative abstract controller that implements authorization checks based on the user's group/role. <br>
 • Make sure that administrative functions inside a regular controller implement authorization checks based on the user's group and role. <br>
-• Implement zero trust policies. 
+• Implement zero trust policies. <br>
+• It is crucial to monitor what is happening with user accounts, to detect anomalous activity such as multiple login attempts, login at unusual hours, or login by users to systems or data they don’t usually access. <br>
+• Ensure that the application verifies and validates the intended HTTP verbs for each request. Reject any requests containing unexpected or unauthorized HTTP methods, preventing attackers from exploiting this vulnerability. <br>
+• Implement security headers such as Content-Security-Policy (CSP) and Strict-Transport-Security (HSTS) to provide an additional layer of protection against HTTP Verb Tampering and other web vulnerabilities.
 
 ### API6: 2023 Unrestricted Access to Sensitive Business Flows
 
