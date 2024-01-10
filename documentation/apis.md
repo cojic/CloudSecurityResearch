@@ -451,6 +451,8 @@ Implement a reverse proxy that validates and filters outgoing requests, blocking
 Gateway Protection: Use gateway protection mechanisms to monitor outgoing requests for suspicious patterns, preventing SSRF attempts.
 
 ### API8: 2023 Security misconfiguration
+<img width="1686" alt="Untitled (8)" src="https://github.com/cojic/CloudSecurityResearch/assets/102799668/f421c6e9-20c4-40a4-82a9-c4bbdaadc64f">
+
 
 #### What is it?
 Security misconfigurations are the errors and oversights made during an API’s configuration, implementation, or maintenance that can lead to security vulnerabilities. This happens when developers/ IT teams have not followed security best practices in implementing and configuring APIs. <br>
@@ -534,7 +536,7 @@ An automated process does a better job of repetitive configuration tasks than hu
 As a best practice, you must regularly update your software, especially when using third-party code. They often contain patches or fixes for any vulnerabilities that were detected recently.
 
 #### Conduct Frequent Audits
-Employ periodic inspection to detect and mitigate potential security misconfigurations and appsec risks. Here again, Aqua can give you all the information you need to conduct an audit at any time. Aqua tracks and monitors each step accurately and delivers end-to-end visibility.
+Employ periodic inspection to detect and mitigate potential security misconfigurations and appsec risks.
 
 #### Build Segmented Architecture
 It is crucial to build a robust application architecture that is secure and segmented to create effective separation between components and assets. It is a good strategy to leverage containerization or cloud security groups (ACLs).
