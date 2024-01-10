@@ -195,7 +195,8 @@ Keep the returned data structures to the minimum required by the business or fun
 
 
 ### API4: 2023 Unrestricted resource consumption 
-
+<img width="1294" alt="Untitled (3)" src="https://github.com/cojic/CloudSecurityResearch/assets/102799668/8b41707a-3a7a-4902-a461-afa7cfa09d21">
+<br> 
 #### What is it?
 Unrestricted resource consumption is a frequently overlooked API vulnerability. API requests consume resources such as network, CPU, memory, and storage. When there are no restrictions on the number, content, or type of requests made by users, an attacker can exploit this vulnerability, impacting the APIs' availability and service rate. The following describes some of the techniques attackers can use:
 <br> 
@@ -236,6 +237,18 @@ Excessive traffic leads to a denial of service, disrupting normal access.
 Legitimate device owners become secondary victims or unknowing participants.
 Attackers, often hard to identify, exploit the infected botnets for various attacks.
 "Attack-for-hire" services enable inexperienced individuals to launch DDoS attacks using rented botnets.
+
+#### API Rate Limiting Abuse
+It involves manipulating the parameters or characteristics of an API request to exploit the server's resources by causing it to return an unusually large amount of data. <br>
+
+In the following scenario, an attacker manipulates the content of the API request, leading to a server response with an excessively large payload, resulting in slow application performance.  <br>
+
+An attacker sends a legitimate API request for a single page with 200 items.  <br>
+The attacker modifies the page size, increasing it from 200 to 200,000.  <br>
+This increase causes the application to return an excessive number of items in response to the query, consuming excessive server resources.  <br>
+
+![image](https://github.com/cojic/CloudSecurityResearch/assets/102799668/5d8af144-d7ec-414a-88c9-916ffdf8da99)
+<br>
 
 #### Mitigates
 • Use a solution that makes it easy to limit memory, CPU, number of restarts, file descriptors, and processes such as Containers / Serverless code (e.g. Lambdas). <br>
