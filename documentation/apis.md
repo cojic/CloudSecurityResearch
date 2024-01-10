@@ -10,6 +10,9 @@ With the transition to cloud environments, APIs become more accessible. This tra
 ### API1:2023 BROKEN OBJECT-LEVEL AUTHORIZATION
 The OWASP list of top 10 API vulnerabilities identifies Broken Object Level Authorization (BOLA) as the number one vulnerability. Almost every company has APIs that are vulnerable to BOLA and there are currently no direct solutions to mitigate this vulnerability (depending on business logic). 
 Insecure Direct Object Reference (IDOR) and BOLA are the same thing. The name was changed from IDOR to BOLA as part of the project.
+<br>
+<img width="2288" alt="Untitled" src="https://github.com/cojic/CloudSecurityResearch/assets/102799668/536844ef-dfcb-42d0-980b-f84ca653fa72">
+<br>
 
 #### What is it?
 Broken object-level authorization is a security vulnerability that occurs when an application or application programming interface (API) provides access to data objects based on the user’s role but fails to verify if the user is authorized to access those specific data objects. This vulnerability allows malicious users to bypass authorization and access sensitive data or execute unauthorized actions, to which they would otherwise not have access. 
