@@ -457,7 +457,7 @@ Implement a reverse proxy that validates and filters outgoing requests, blocking
 Gateway Protection: Use gateway protection mechanisms to monitor outgoing requests for suspicious patterns, preventing SSRF attempts.
 
 ### API8: 2023 Security misconfiguration
-<img width="1686" alt="Untitled (8)" src="https://github.com/cojic/CloudSecurityResearch/assets/102799668/f421c6e9-20c4-40a4-82a9-c4bbdaadc64f">
+<img width="1820" alt="Untitled (18)" src="https://github.com/cojic/CloudSecurityResearch/assets/102799668/2f79be97-2a9e-40ee-bc64-65c31b2c7c9b">
 
 
 #### What is it?
