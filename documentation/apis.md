@@ -199,7 +199,8 @@ Keep the returned data structures to the minimum required by the business or fun
 
 
 ### API4: 2023 Unrestricted resource consumption 
-<img width="1294" alt="Untitled (3)" src="https://github.com/cojic/CloudSecurityResearch/assets/102799668/8b41707a-3a7a-4902-a461-afa7cfa09d21">
+<img width="1742" alt="Untitled (14)" src="https://github.com/cojic/CloudSecurityResearch/assets/102799668/73ac5f65-1b3b-4f96-a193-0590ca7d9e31">
+
 <br> 
 #### What is it?
 Unrestricted resource consumption is a frequently overlooked API vulnerability. API requests consume resources such as network, CPU, memory, and storage. When there are no restrictions on the number, content, or type of requests made by users, an attacker can exploit this vulnerability, impacting the APIs' availability and service rate. The following describes some of the techniques attackers can use:
