@@ -627,6 +627,8 @@ Proper management involves the deletion of unused assets, adherence to OWASP gui
 
   
 ### API10: 2023 Unsafe Consumption of APIs
+<img width="1815" alt="Untitled (19)" src="https://github.com/cojic/CloudSecurityResearch/assets/102799668/a98272d4-64fa-4d21-bb0a-c48f7b09d0dd">
+
 
 #### What is it?
 This vulnerability means an API integrates with third-party APIs and services that can endanger it. For instance, if developers use weaker security standards for third-party APIs, threat actors can get to the target API by compromising those other APIs first. Third-party services may allow them to bypass authentication and manipulate API responses.
@@ -661,8 +663,8 @@ To mitigate the risks associated with unsafe API consumption, organizations shou
 • Implement Access Controls and Secure Object References: APIs must enforce proper access controls to ensure clients can only access authorized resources. Additionally, internal object references should be abstracted or obfuscated to prevent direct manipulation by clients. <br>
 • Regularly Update and Patch APIs: Keeping APIs up to date with the latest security patches and updates is crucial to address any known vulnerabilities promptly. <br>
 • Conduct Security Testing and Code Reviews: Regular security testing, including penetration testing and code reviews, is vital for identifying and addressing any security weaknesses or vulnerabilities in the API implementation. <be>
-By following these mitigation strategies, organizations can significantly reduce the risk of unsafe API consumption and enhance the overall security of their systems.
-
+By following these mitigation strategies, organizations can significantly reduce the risk of unsafe API consumption and enhance the overall security of their systems. <br>
+• Rate limiting restricts the volume of network traffic over a specific period, essentially preventing web servers from getting overwhelmed by requests from specific IP addresses. Rate limiting can be used to prevent DDoS attacks that use botnets to spam an endpoint with an abnormal amount of requests at once.
 
 ## Literature
 1. [What is API definition](https://www.altexsoft.com/blog/what-is-api-definition-types-specifications-documentation/) 
