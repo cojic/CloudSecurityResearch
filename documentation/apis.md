@@ -265,7 +265,7 @@ This increase causes the application to return an excessive number of items in r
 • Configure spending limits for all service providers/API integrations. When setting spending limits is not possible, billing alerts should be configured instead. <br>
 
 ### API5: 2023 Broken Function Level Authorization
-<img width="1252" alt="Untitled (5)" src="https://github.com/cojic/CloudSecurityResearch/assets/102799668/427d1654-340f-46f4-aec2-54760b59c559">
+<img width="1758" alt="Untitled (15)" src="https://github.com/cojic/CloudSecurityResearch/assets/102799668/912ee6b2-f818-4116-b846-1269f7aced43">
 
 
 #### What is it?
