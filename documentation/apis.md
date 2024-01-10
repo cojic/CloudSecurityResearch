@@ -53,7 +53,8 @@ There are four different types of BOLA attacks:
 
 ### API2: 2023 Broken Authentication
 <br>
-<img width="1914" alt="Untitled (11)" src="https://github.com/cojic/CloudSecurityResearch/assets/102799668/1e14e02d-b887-4e31-b76b-ae23c128d6e2">
+<img width="1865" alt="Untitled (12)" src="https://github.com/cojic/CloudSecurityResearch/assets/102799668/81d28919-f52b-436b-93d6-8a459c31102c">
+
 
 <br>
 
@@ -147,7 +148,8 @@ The following are the ways of preventing broken authentication attacks:
 
 
 ### API3: 2023 Broken Object Property Level Authorization
-<img width="1360" alt="Untitled (2)" src="https://github.com/cojic/CloudSecurityResearch/assets/102799668/89cd9328-cfc0-4fd7-847a-34f441b2ab7f">
+<img width="1734" alt="Untitled (13)" src="https://github.com/cojic/CloudSecurityResearch/assets/102799668/79c14ec3-0cfc-45c6-96e2-4ed8f6222935">
+
 
 
 #### What is it?
