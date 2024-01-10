@@ -51,6 +51,9 @@ There are four different types of BOLA attacks:
 •	Write tests to evaluate the vulnerability of the authorization mechanism. Do not deploy changes that make the tests fail.
 
 ### API2: 2023 Broken Authentication
+<br>
+<img width="1289" alt="Untitled (1)" src="https://github.com/cojic/CloudSecurityResearch/assets/102799668/bb624656-6941-40e2-9220-24dc5d5aecf6">
+<br>
 
 #### What is it?
 Broken Authentication is a security vulnerability that occurs when the authentication of a web application is  flawed or improperly implemented.
@@ -134,10 +137,11 @@ Anatomy of the attack
 #### Mitigates
 The following are the ways of preventing broken authentication attacks:
 1.	Implement multi-factor authentication (MFA) to verify the consumer's identity. Examples include One-Time Password (OTP) messaged or emailed to the user. This step will prevent brute force attacks, credential stuffing, and stolen credential reuse attacks.
-2.	Use weak-password checks by forcing users to include a mix of small letters, capital letters, alphanumeric symbols, and special characters while creating passwords. It would be best to follow NIST 800-63 B's guidelines in section 5.1.1 for memorized secrets.
+2.	Use strong passwords and proper credentials management.
 3.	Place a limit on failed login attempts to 3 or a maximum of 5. Alert the system admin if you detect an attack — brute force, credential stuffing, or any other attack.
 4.	Ensure that credential recovery, registration, and API pathways are not vulnerable to account enumeration attacks by using the same message for each outcome. 
 5.	Generating new random session IDs with high entropy after login protects against hackers. Remember, those session IDs should not be present in the URL and invalidated after logout.
+6.	Using encryption can help protect the communication between two parties from being intercepted and read by an attacker. This can include using HTTPS for web browsing, VPN for remote connections, and SSL or TLS for email.
 
 
 ### API3: 2023 Broken Object Property Level Authorization
