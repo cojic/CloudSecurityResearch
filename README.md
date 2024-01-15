@@ -24,6 +24,8 @@ By creating a threat model, we aim to illustrate possible attacks and the strate
   The document provides an overview of the threats and attacks for Amazon S3.
 * ### [APIs Threat Model](documentation/apis.md)
 The document provides an overview  of the threats and attacks for APIs. 
+* ### [MySQL Threat Model](documentation/mysql.md)
+  The document provides an overview  of the threats and attacks for MySQL Database.
 
 ## Literature
 1. [What Are API Security Risks?](https://www.akamai.com/glossary/what-are-api-security-risks)
