@@ -17,6 +17,86 @@ data.
 
 ## Attacks
 
+### Data Exfiltration
+
+Data exfiltration is a type of security breach that leads to the unauthorized transfer of sensitive data from the compromised S3 bucket to external endpoints.
+
+After identifying misconfigured S3 buckets often achieved through Bucket Enumeration, an attacker can find and exploit vulnerabilities in the S3 bucket by analyzing the security measures applied to the bucket. If the attacker gains unauthorized access to the bucket, he can use data exfiltration methods to transfer sensitive data.
+
+**Types of data exfiltration attacks and how do they happen**
+After attackers successfully target misconfigured S3 Buckets, data exfiltration takes place.
+Some of the ways are described in the following.
+
+#### Misconfigured ACL
+If the bucket has misconfigured ACL(Access Control Lists) permissions, you can use this command to download data from an S3 bucket to your local system. 
+ ```
+    aws s3 sync s3://<bucket>/<path> </local/path>
+ ```
+
+#### EC2 Metadata IP
+AWS provides instance metadata for EC2 instances via a private HTTP interface only accessible to the virtual server itself. While this does not have any significance from an external perspective, it can however be a valuable feature to leverage in SSRF-related attacks. The categories of metadata are exposed to all EC2 instances via the following URL: http://169.254.169.254/latest/meta-data/
+
+#### Leaked Keys
+Attackers may stumble on leaked AWS Client ID and Client Secret Keys on Github, and Gitlab. If an attacker gets access to the keys associated with an Amazon Relational Database (RDS) and takes snapshots of these resources, they can deploy a new RDS database based on the snapshot. And when they do that they get to reset the passwords associated with the database. So now they’ve got access to all of your data without actually having to have the passwords required on the RDS instance. It’s the same case with the EBS (Elastic Block Store) snapshot. For example, assuming they’re able to create an SSH key pair in your account, they could launch a new instance from the snapshot and assign their key pair to the instance, giving them full access to the data of the original instance. If they can’t create SSH keys in your account, they might try to mount the snapshot to an existing instance they can already access. 
+
+#### Unsecured EC2 Instances
+EC2 instances running data storage services like Elasticsearch and MongoDB, which by default don’t have any credential requirements to interact with the data store also add up to one of the common issues that lead to data exfiltration. If the security groups are not set up properly you can inadvertently expose, for example, the Elasticsearch port (9200) out to the Internet. If that happens, you can bet that somebody is going to find it and dump its entire data set. It’s become so common that adversaries have gone through the trouble of creating ransomware that fully hijacks the data store and encrypts the data within it. To find publicly exposed Elasticsearch databases, an attacker will use the following dork on Shodan; <br>
+port:”9200″ elastic
+
+#### Application abuse
+A crafty attacker will bang on a web application long enough to find a vulnerability that they can use to exfiltrate data from the system. This technique is very effective because most web applications need access to some degree of sensitive data to be of any use. A good example is the Facebook Data breach where three software flaws in Facebook’s systems allowed hackers to break into user accounts. 
+
+### Mitigates
+
+#### Acces Control
+As mentioned in the previous attack, it is essential to pay attention to configurations such as setting up IAM user policies, S3 bucket policies, VPC (Virtual Private Cloud) endpoint policies, and SCPs (AWS Organizations Service Control Policies).  
+
+A majority of modern use cases in Amazon S3 no longer require the use of ACLs, and it is recommended to keep ACLs disabled except in unusual circumstances where it is needed to control access for each object individually.
+With ACL disabled, it is recommended to use the policies mentioned above.
+
+#### Keep buckets not publicly accessible
+
+Unless you explicitly require anyone on the internet to be able to read or write to your S3 bucket, make sure that your S3 bucket is not public. Some of the ways to block public access are:
+**Use S3 Block Public Access**
+This sets up centralized control to limit public access to S3 resources, regardless of how the resources are created.
+**Identify policies that allow wildcard identity and wildcard action**
+Wildcard Identity (example: "Principal": "*") means that anyone can access resources. Also, Wildcard Action means that the user can perform any action with targeted resources. After identifying, those needs to be avoided by any cost, unless there is specific logic that requires those.
+**Implementing ongoing detective controls** 
+Consider implementing ongoing detective controls by using the s3-bucket-public-read-prohibited and s3-bucket-public-write-prohibited managed AWS Config Rules.
+
+Also, it is important to use tools, such as AWS Trusted Advisor, to inspect Amazon S3 implementation.
+
+#### Implement least privilege access
+It is recommended to grant only permissions that are required to perform a task. Implementing least-privilege access is fundamental in reducing security risk and the impact that could result from errors or malicious intent.
+Amazon S3 actions and Permissions Boundaries for IAM Entities, 
+Bucket policies and user policies, Access control list (ACL) overview, and Service Control Policies are tools for implementing least privilege access.
+
+#### IAM roles
+Its recommended to avoid storing AWS credentials directly in the application or Amazon EC2 instance. These are long-term credentials that are not automatically rotated and could have a significant business impact if they are compromised. 
+
+Instead, use an IAM role to manage temporary credentials for applications or services that need to access Amazon S3.
+
+When you use a role, you don't have to distribute long-term credentials (such as a username and password or access keys) to an Amazon EC2 instance or AWS service, such as AWS Lambda. The role supplies temporary permissions that applications can use when they make calls to other AWS resources.
+
+#### Encrypt Sensitive Data
+For protecting data at rest, and reducing the risk of unauthorized access to sensitive data can be used server-side encryption, as mentioned earlier.
+**Server-side encryption** with Amazon S3 managed keys (SSE-S3) is the default encryption configuration for every bucket in Amazon S3. To use a different type of encryption, you can either specify the type of server-side encryption to use in your S3 PUT requests, or you can set the default encryption configuration in the destination bucket. Server-side encryption options that Amazon S3 provides are Server-side encryption with AWS Key Management Service (AWS KMS) keys (SSE-KMS), Dual-layer server-side encryption with AWS Key Management Service (AWS KMS) keys (DSSE-KMS), Server-side encryption with customer-provided keys (SSE-C). 
+**Client-side encryption** needs a developer to manage the encryption process, the encryption keys, and related tools. manage the encryption process, the encryption keys, and related tools. There are many Amazon S3 client-side encryption options.
+
+####  Encryption of data in transit
+HTTPS (TLS) is recommended to use, to help prevent potential attackers' encryption of data in transit. It is recommended to allow only encrypted connections over HTTPS (TLS) by using the was: SecureTransport condition in your Amazon S3 bucket policies.
+
+#### "Write Once Read Many" model
+With S3 Object Lock, you can store objects by using a WORM model. S3 Object Lock can help prevent accidental or inappropriate deletion of data.
+S3 Object Lock can be used to help protect your AWS CloudTrail logs.
+
+#### Enable Logging and Monitoring
+Analyzing CloudTrail logs can be used to identify and respond to data exfiltration attempts by monitoring S3 data events, and analyzing logs for unauthorized object copies.
+
+#### Consider using VPC endpoints for Amazon S3 access
+A virtual private cloud (VPC) endpoint for Amazon S3 is a logical entity within a VPC that allows connectivity only to Amazon S3. VPC endpoints provide multiple ways to control access to your S3 bucket and help prevent traffic from traversing the open internet.
+
+
 ### Bucket Enumeration
 
 Bucket enumeration is a process of identifying misconfigured S3 buckets that are publicly accessible. This process can be used as a part of security analysis, or for malicious intent, to determine which objects are present within a given bucket. When an attacker successfully performs S3 bucket enumeration on misconfigured buckets, they can potentially gain access to various types of sensitive data depending on what is stored in those buckets.
@@ -136,85 +216,78 @@ By searching for an organization's name, you can filter and browse through the c
 #### Encrypt Sensitive Data:
 - After public buckets are found, the attacker can see the data inside the bucket. Use server-side encryption so Amazon S3 will encrypt objects before saving them and then decrypts the objects when downloading them.
 
+### Abuse of Bucket Permissions
+Aabuse of S3 bucket permissions refers to instances where the configuration and permissions of buckets are not properly managed, leading to security vulnerabilities, including unauthorized access, data exposure, and data leakage.
 
-### Data Exfiltration
+After identifying S3 buckets using Bucket Enumeration, attacker can test permissions they have. 
 
-Data exfiltration is a type of security breach that leads to the unauthorized transfer of sensitive data from the compromised S3 bucket to external endpoints.
+![Alt text](images/T5.png)
 
-After identifying misconfigured S3 buckets often achieved through Bucket Enumeration, an attacker can find and exploit vulnerabilities in the S3 bucket by analyzing the security measures applied to the bucket. If the attacker gains unauthorized access to the bucket, he can use data exfiltration methods to transfer sensitive data.
-
-**Types of data exfiltration attacks and how do they happen**
-After attackers successfully target misconfigured S3 Buckets, data exfiltration takes place.
-Some of the ways are described in the following.
-
-#### Misconfigured ACL
-If the bucket has misconfigured ACL(Access Control Lists) permissions, you can use this command to download data from an S3 bucket to your local system. 
+**READ Permission**
+This permission allows reading the contents of the bucket. At the object level, it allows reading the contents as well as metadata of the object. 
+Testing this can be done by accessing it via URL http://[name_of_bucket].s3.amazonaws.com. This same thing can be done by using the AWS CLI as well.
  ```
-    aws s3 sync s3://<bucket>/<path> </local/path>
+    aws s3 ls s3://[name_of_bucket]  --no-sign-request
+ ```
+No sign request switch that we used in the above command is used to specify not to use any credential to sign the request. A bucket that allows reading its contents will spit out all the contents once requested by any of the above methods. HTML request will show output on the XML page and the command line will give a list of files.
+This image shows resoult of souch commands.
+![Alt text](/documentation/images/read.png)
+
+**WRITE Permission**
+This permission allows to create, overwrite, edit and delete objects in a bucket. This permission can be tested by the AWS CLI, with following command.
+ ```
+    aws s3 cp localfile s3://[name_of_bucket]/test_file.txt –-no-sign-request
+ ```
+A bucket that allows unrestricted file upload will show a message that the file has been uploaded. On following image, when command is run for first time, it showed error because s3 bucket blocked file uploads. Later on, permission are modified to allowe file uploads.
+![Alt text](/documentation/images/write.png)
+
+**READ_ACP**
+At bucket, level allows to read the bucket’s Access Control List and at the object level allows to read the object’s Access Control List.
+ ```
+    aws s3api get-bucket-acl --bucket [bucketname] --no-sign
+    aws s3api get-object-acl --bucket [bucketname] --key index.html --no-sign-request
+ ```
+Once we execute both these commands, they will output a JSON describing the ACL policies for the resource being specified.
+![Alt text](/documentation/images/readacp.png)
+
+**WRITE_ACP**
+This policy at the bucket level allows setting access control list for the bucket. At the object level, allows setting access control list for the objects.
+ ```
+    aws s3api put-bucket-acl --bucket [bucketname] [ACLPERMISSIONS] --no-sign-request
+    //To test for a single object, following command
+    aws s3api put-object-acl --bucket [bucketname] --key file.txt [ACLPERMISSIONS] --no-sign-request
  ```
 
-#### EC2 Metadata IP
-AWS provides instance metadata for EC2 instances via a private HTTP interface only accessible to the virtual server itself. While this does not have any significance from an external perspective, it can however be a valuable feature to leverage in SSRF-related attacks. The categories of metadata are exposed to all EC2 instances via the following URL: http://169.254.169.254/latest/meta-data/
 
-#### Leaked Keys
-Attackers may stumble on leaked AWS Client ID and Client Secret Keys on Github, and Gitlab. If an attacker gets access to the keys associated with an Amazon Relational Database (RDS) and takes snapshots of these resources, they can deploy a new RDS database based on the snapshot. And when they do that they get to reset the passwords associated with the database. So now they’ve got access to all of your data without actually having to have the passwords required on the RDS instance. It’s the same case with the EBS (Elastic Block Store) snapshot. For example, assuming they’re able to create an SSH key pair in your account, they could launch a new instance from the snapshot and assign their key pair to the instance, giving them full access to the data of the original instance. If they can’t create SSH keys in your account, they might try to mount the snapshot to an existing instance they can already access. 
+## Mitigates
 
-#### Unsecured EC2 Instances
-EC2 instances running data storage services like Elasticsearch and MongoDB, which by default don’t have any credential requirements to interact with the data store also add up to one of the common issues that lead to data exfiltration. If the security groups are not set up properly you can inadvertently expose, for example, the Elasticsearch port (9200) out to the Internet. If that happens, you can bet that somebody is going to find it and dump its entire data set. It’s become so common that adversaries have gone through the trouble of creating ransomware that fully hijacks the data store and encrypts the data within it. To find publicly exposed Elasticsearch databases, an attacker will use the following dork on Shodan; <br>
-port:”9200″ elastic
+#### Bucket policies:
+- Administrators should set each and every permission/Action manually as per requirement and configure the bucket properly such that public access is blocked.
+- Example of policy where the main problem is with the Action tag which is set to *. It means that to allow all the actions including reading write upload delete etc.
+    ```
+    {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Sid": "Statement1",
+                "Effect": "Allow",
+                "Principal": {
+                    "AWS": ""
+                },
+                "Action": "",
+                "Resource": [
+                    "arn:aws:s3:::temp4blog",
+                    "arn:aws:s3:::temp4blog/*"
+                ]
+            }
+        ]
+    }
+    ```
 
-#### Application abuse
-A crafty attacker will bang on a web application long enough to find a vulnerability that they can use to exfiltrate data from the system. This technique is very effective because most web applications need access to some degree of sensitive data to be of any use. A good example is the Facebook Data breach where three software flaws in Facebook’s systems allowed hackers to break into user accounts. 
+#### Acces Controll:
+- As mentioned in the previous attacks, it is always essential to pay attention to configurations such as setting up IAM user policies and S3 bucket policies, and implement principle of Least-Privilege.
+- Don't allow public access to bucket.
 
-### Mitigates
-
-#### Acces Control
-As mentioned in the previous attack, it is essential to pay attention to configurations such as setting up IAM user policies, S3 bucket policies, VPC (Virtual Private Cloud) endpoint policies, and SCPs (AWS Organizations Service Control Policies).  
-
-A majority of modern use cases in Amazon S3 no longer require the use of ACLs, and it is recommended to keep ACLs disabled except in unusual circumstances where it is needed to control access for each object individually.
-With ACL disabled, it is recommended to use the policies mentioned above.
-
-#### Keep buckets not publicly accessible
-
-Unless you explicitly require anyone on the internet to be able to read or write to your S3 bucket, make sure that your S3 bucket is not public. Some of the ways to block public access are:
-**Use S3 Block Public Access**
-This sets up centralized control to limit public access to S3 resources, regardless of how the resources are created.
-**Identify policies that allow wildcard identity and wildcard action**
-Wildcard Identity (example: "Principal": "*") means that anyone can access resources. Also, Wildcard Action means that the user can perform any action with targeted resources. After identifying, those needs to be avoided by any cost, unless there is specific logic that requires those.
-**Implementing ongoing detective controls** 
-Consider implementing ongoing detective controls by using the s3-bucket-public-read-prohibited and s3-bucket-public-write-prohibited managed AWS Config Rules.
-
-Also, it is important to use tools, such as AWS Trusted Advisor, to inspect Amazon S3 implementation.
-
-#### Implement least privilege access
-It is recommended to grant only permissions that are required to perform a task. Implementing least-privilege access is fundamental in reducing security risk and the impact that could result from errors or malicious intent.
-Amazon S3 actions and Permissions Boundaries for IAM Entities, 
-Bucket policies and user policies, Access control list (ACL) overview, and Service Control Policies are tools for implementing least privilege access.
-
-#### IAM roles
-Its recommended to avoid storing AWS credentials directly in the application or Amazon EC2 instance. These are long-term credentials that are not automatically rotated and could have a significant business impact if they are compromised. 
-
-Instead, use an IAM role to manage temporary credentials for applications or services that need to access Amazon S3.
-
-When you use a role, you don't have to distribute long-term credentials (such as a username and password or access keys) to an Amazon EC2 instance or AWS service, such as AWS Lambda. The role supplies temporary permissions that applications can use when they make calls to other AWS resources.
-
-#### Encrypt Sensitive Data
-For protecting data at rest, and reducing the risk of unauthorized access to sensitive data can be used server-side encryption, as mentioned earlier.
-**Server-side encryption** with Amazon S3 managed keys (SSE-S3) is the default encryption configuration for every bucket in Amazon S3. To use a different type of encryption, you can either specify the type of server-side encryption to use in your S3 PUT requests, or you can set the default encryption configuration in the destination bucket. Server-side encryption options that Amazon S3 provides are Server-side encryption with AWS Key Management Service (AWS KMS) keys (SSE-KMS), Dual-layer server-side encryption with AWS Key Management Service (AWS KMS) keys (DSSE-KMS), Server-side encryption with customer-provided keys (SSE-C). 
-**Client-side encryption** needs a developer to manage the encryption process, the encryption keys, and related tools. manage the encryption process, the encryption keys, and related tools. There are many Amazon S3 client-side encryption options.
-
-####  Encryption of data in transit
-HTTPS (TLS) is recommended to use, to help prevent potential attackers' encryption of data in transit. It is recommended to allow only encrypted connections over HTTPS (TLS) by using the was: SecureTransport condition in your Amazon S3 bucket policies.
-
-#### "Write Once Read Many" model
-With S3 Object Lock, you can store objects by using a WORM model. S3 Object Lock can help prevent accidental or inappropriate deletion of data.
-S3 Object Lock can be used to help protect your AWS CloudTrail logs.
-
-#### Enable Logging and Monitoring
-Analyzing CloudTrail logs can be used to identify and respond to data exfiltration attempts by monitoring S3 data events, and analyzing logs for unauthorized object copies.
-
-#### Consider using VPC endpoints for Amazon S3 access
-A virtual private cloud (VPC) endpoint for Amazon S3 is a logical entity within a VPC that allows connectivity only to Amazon S3. VPC endpoints provide multiple ways to control access to your S3 bucket and help prevent traffic from traversing the open internet.
 
 ## Threat - Taking control over data
 Target resource - S3 bucket and its data.
@@ -431,3 +504,4 @@ The next screenshot shows what happens when the object owner uses a pre-signed U
 15. [Ransomware in the Cloud: Breaking Down The Attack Vectors](https://www.dig.security/post/understand-ransomware-to-protect-your-data-in-the-cloud)
 16. [Subdomain Takeover via Abandoned Amazon S3 Bucket](https://char49.com/articles/subdomain-takeover-via-abandoned-amazon-s3-bucket)
 17. [Sub-Domain Take Over — AWS S3 Bucket](https://towardsaws.com/subdomain-takeover-aws-s3-bucket-4699815d1b62)
+18. [Abusing S3 Bucket Permissions](https://www.yeswehack.com/learn-bug-bounty/abusing-s3-bucket-permissions)
