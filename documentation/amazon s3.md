@@ -21,35 +21,35 @@ data.
 
 Bucket enumeration is a process of identifying misconfigured S3 buckets that are publicly accessible. This process can be used as a part of security analysis, or for malicious intent, to determine which objects are present within a given bucket. When an attacker successfully performs S3 bucket enumeration on misconfigured buckets, they can potentially gain access to various types of sensitive data depending on what is stored in those buckets.
 Several methods can be used for finding S3 buckets. 
-<br>
+
 The attacker will target a misconfigured bucket. Some of the ways to locate them are by using Google Dorks, AWS CLI tools, CLI tools from Github, and websites.
 
 #### Using Google Dorks to find S3 buckets
 Google Dorks are powerful search queries that allow you to find specific information on the internet. <br>
 Google Dorking, also known as Google hacking, can return information difficult to locate through simple search queries. This includes information not intended for public viewing, but that is inadequately protected and can, therefore, be "dorked" by a hacker.
-<br>
-You can use Google Dorks to discover S3 buckets associated with Amazon Web Services. Here are a couple of examples: <br>
 
-**site:http://amazonaws.com inurl:".s3.amazonaws.com/"**<br>
+You can use Google Dorks to discover S3 buckets associated with Amazon Web Services. Here are a couple of examples: 
+
+**site:http://amazonaws.com inurl:".s3.amazonaws.com/"**
 1. site:http://amazonaws.com: This part restricts the search to the domain "amazonaws.com." The site: operator is used to specify a particular domain or site where the search should be performed.
 2. inurl:".s3.amazonaws.com/": This part of the query focuses on the URL structure. The inurl: operator is used to search for a specific string within the URL. In this case, it looks for URLs containing ".s3.amazonaws.com/". The . before "s3" is used to ensure that it is a specific part of the URL and not just any occurrence of "s3."
 
-**site:http://s3.amazonaws.com intitle:index.of.bucket** <br>
+**site:http://s3.amazonaws.com intitle:index.of.bucket** 
 1. site:http://s3.amazonaws.com: This restricts the search to the specified site, in this case, http://s3.amazonaws.com. It specifies that the search should focus on Amazon S3 buckets hosted on the Amazon Web Services (AWS) S3 domain.
 2. intitle:index.of.bucket: This part of the query focuses on the title of the web pages. It's looking for pages that have the words "index" and "of" in the title and the word "bucket" in the content. This is a common pattern for the default index pages of open S3 buckets, which might expose the contents of the bucket.
 
 #### Using AWS CLI tools find S3 buckets
-After creating an AWS account and successfully installation and configuring AWS CLI, AWS CLI commands can be used to interact with S3 Buckets. <br>
-Some of the examples: <br>
+After creating an AWS account and successfully installation and configuring AWS CLI, AWS CLI commands can be used to interact with S3 Buckets. 
+Some of the examples:
 
 **List all Files in an S3 Bucket with AWS CLI** <br>
 To list all of the files of an S3 bucket with the AWS CLI, use the s3 ls command, passing in the --recursive parameter.
-
-**aws s3 ls s3://YOUR_BUCKET --recursive --human-readable --summarize**
-
+ ```
+    aws s3 ls s3://YOUR_BUCKET --recursive --human-readable --summarize
+ ```
 The output of the command will show the date the objects were created, their file size, and their path.
 
-<br>
+
 The parameters we passed to the s3 ls command are the following:
 
 1. **recursive**: performs the command on all files under the set prefix
@@ -58,52 +58,67 @@ The parameters we passed to the s3 ls command are the following:
 
 **List all Files in a Folder of an S3 Bucket**
 To list all files, located in a folder of an S3 bucket, use the s3 ls command, passing in the entire path to the folder and setting the --recursive parameter.
-
-**aws s3 ls s3://YOUR_BUCKET/YOUR_FOLDER/ --recursive --human-readable --summarize**
+ ```
+    aws s3 ls s3://YOUR_BUCKET/YOUR_FOLDER/ --recursive --human-readable --summarize
+```
 
 The output of the command only will show the files in the /my-folder-1 directory.
 
-<br>
+
 
 **List only the Filenames of an S3 Bucket**
-To only list the filenames of an S3 bucket, we have to: <br>
+To only list the filenames of an S3 bucket, we have to: 
 1. Use the s3api list-objects command.
 2. Set the --output parameter to text.
 3. Use the --query parameter to filter the output of the command.
-<br>
 
-**aws s3api list-objects --bucket YOUR_BUCKET --output text --query "Contents[].{Key: Key}"**
+ ```
+    aws s3api list-objects --bucket YOUR_BUCKET --output text --query "Contents[].{Key: Key}"
+```
 
 The output of the command will show all the filenames, or in other words, path names in the S3 bucket.
 
-<br>
 
 To list only the filenames in a specific folder, add the --prefix parameter to the command:
-
-**aws s3api list-objects --bucket YOUR_BUCKET --prefix "my-folder/" --output text --query "Contents[].{Key: Key}"**
-<br>
+ 
+ ```
+    aws s3api list-objects --bucket YOUR_BUCKET --prefix "my-folder/" --output text --query "Contents[].{Key: Key}"
+ ```
 Output to a file can be redirected to the local file system, using the command: <br>
 
-**aws s3api list-objects --bucket YOUR_BUCKET --prefix "my-folder-1/" --output text --query "Contents[].{Key: Key}" > file-names.txt**
+ ```
+    aws s3api list-objects --bucket YOUR_BUCKET --prefix "my-folder-1/" --output text --query "Contents[].{Key: Key}" > file-names.txt
+ ```
 
 #### Using CLI tools from GitHub to find S3 buckets
 GitHub hosts a range of online tools that aid in finding S3 buckets associated with a website. Some of the tools are Slurp, Bucket_finder, S3Scanner, Cloudlist, Lazy S3, Dumpster Diver, and many more. The main purpose of these tools is to find buckets, scan them, and dump their data. 
 
 #### S3Scanner
 S3Scanner uses a list of entries to digest. With this list, it will try to find available S3 buckets. Several formats can be used (bucket name, domain name, full S3 URL, or bucket:region).
-<br>
+
 
 **Examples**
-1. Scan AWS buckets listed in a file with 8 threads: **$ s3scanner --threads 8 scan --buckets-file ./bucket-names.txt**
-2. Scan a bucket in Digital Ocean Spaces: **$ s3scanner --endpoint-url https://sfo2.digitaloceanspaces.com scan --bucket my-bucket**
-3. Dump a single AWS bucket: **$ s3scanner dump --bucket my-bucket-to-dump**
-4. Scan a single Dreamhost Objects bucket that uses the host address style and an invalid SSL cert: **$ s3scanner --endpoint-url https://objects.dreamhost.com --endpoint-address-style host --insecure scan --bucket my-bucket**
+1. Scan AWS buckets listed in a file with 8 threads: 
+ ```
+    $ s3scanner --threads 8 scan --buckets-file ./bucket-names.txt
+ ```
+2. Scan a bucket in Digital Ocean Spaces: 
+ ```
+    $ s3scanner --endpoint-url https://sfo2.digitaloceanspaces.com scan --bucket my-bucket
+ ```
+3. Dump a single AWS bucket: 
+ ```
+    $ s3scanner dump --bucket my-bucket-to-dump
+ ```
+4. Scan a single Dreamhost Objects bucket that uses the host address style and an invalid SSL cert: 
+ ```
+    $ s3scanner --endpoint-url https://objects.dreamhost.com --endpoint-address-style host --insecure scan --bucket my-bucket
+```
 
 #### Finding S3 Buckets Using Websites
 Several websites offer services to discover open S3 buckets and other cloud storage repositories. One such website is: https://buckets.grayhatwarfare.com/results/colliershouston <br>
 By searching for an organization's name, you can filter and browse through the contents of their open S3 buckets.
 
-**
 
 ### Mitigates
 #### Limit Public Access: 
@@ -133,8 +148,10 @@ After attackers successfully target misconfigured S3 Buckets, data exfiltration 
 Some of the ways are described in the following.
 
 #### Misconfigured ACL
-If the bucket has misconfigured ACL(Access Control Lists) permissions, you can use this command to download data from an S3 bucket to your local system. <br>
-aws s3 sync s3://<bucket>/<path> </local/path>
+If the bucket has misconfigured ACL(Access Control Lists) permissions, you can use this command to download data from an S3 bucket to your local system. 
+ ```
+    aws s3 sync s3://<bucket>/<path> </local/path>
+ ```
 
 #### EC2 Metadata IP
 AWS provides instance metadata for EC2 instances via a private HTTP interface only accessible to the virtual server itself. While this does not have any significance from an external perspective, it can however be a valuable feature to leverage in SSRF-related attacks. The categories of metadata are exposed to all EC2 instances via the following URL: http://169.254.169.254/latest/meta-data/
@@ -154,44 +171,43 @@ A crafty attacker will bang on a web application long enough to find a vulnerabi
 #### Acces Control
 As mentioned in the previous attack, it is essential to pay attention to configurations such as setting up IAM user policies, S3 bucket policies, VPC (Virtual Private Cloud) endpoint policies, and SCPs (AWS Organizations Service Control Policies).  
 
-A majority of modern use cases in Amazon S3 no longer require the use of ACLs, and it is recommended to keep ACLs disabled except in unusual circumstances where it is needed to control access for each object individually. <br>
+A majority of modern use cases in Amazon S3 no longer require the use of ACLs, and it is recommended to keep ACLs disabled except in unusual circumstances where it is needed to control access for each object individually.
 With ACL disabled, it is recommended to use the policies mentioned above.
-<br>
 
 #### Keep buckets not publicly accessible
 
-Unless you explicitly require anyone on the internet to be able to read or write to your S3 bucket, make sure that your S3 bucket is not public. Some of the ways to block public access are: <br>
-**Use S3 Block Public Access** <br>
+Unless you explicitly require anyone on the internet to be able to read or write to your S3 bucket, make sure that your S3 bucket is not public. Some of the ways to block public access are:
+**Use S3 Block Public Access**
 This sets up centralized control to limit public access to S3 resources, regardless of how the resources are created.
-**Identify policies that allow wildcard identity and wildcard action**<br>
-Wildcard Identity (example: "Principal": "*") means that anyone can access resources. Also, Wildcard Action means that the user can perform any action with targeted resources. After identifying, those needs to be avoided by any cost, unless there is specific logic that requires those.<br>
-**Implementing ongoing detective controls** <br>
+**Identify policies that allow wildcard identity and wildcard action**
+Wildcard Identity (example: "Principal": "*") means that anyone can access resources. Also, Wildcard Action means that the user can perform any action with targeted resources. After identifying, those needs to be avoided by any cost, unless there is specific logic that requires those.
+**Implementing ongoing detective controls** 
 Consider implementing ongoing detective controls by using the s3-bucket-public-read-prohibited and s3-bucket-public-write-prohibited managed AWS Config Rules.
-<br>
+
 Also, it is important to use tools, such as AWS Trusted Advisor, to inspect Amazon S3 implementation.
 
 #### Implement least privilege access
-It is recommended to grant only permissions that are required to perform a task. Implementing least-privilege access is fundamental in reducing security risk and the impact that could result from errors or malicious intent. <br>
+It is recommended to grant only permissions that are required to perform a task. Implementing least-privilege access is fundamental in reducing security risk and the impact that could result from errors or malicious intent.
 Amazon S3 actions and Permissions Boundaries for IAM Entities, 
 Bucket policies and user policies, Access control list (ACL) overview, and Service Control Policies are tools for implementing least privilege access.
 
 #### IAM roles
 Its recommended to avoid storing AWS credentials directly in the application or Amazon EC2 instance. These are long-term credentials that are not automatically rotated and could have a significant business impact if they are compromised. 
-<br>
+
 Instead, use an IAM role to manage temporary credentials for applications or services that need to access Amazon S3.
-<br>
+
 When you use a role, you don't have to distribute long-term credentials (such as a username and password or access keys) to an Amazon EC2 instance or AWS service, such as AWS Lambda. The role supplies temporary permissions that applications can use when they make calls to other AWS resources.
 
 #### Encrypt Sensitive Data
-For protecting data at rest, and reducing the risk of unauthorized access to sensitive data can be used server-side encryption, as mentioned earlier. <br>
-**Server-side encryption** with Amazon S3 managed keys (SSE-S3) is the default encryption configuration for every bucket in Amazon S3. To use a different type of encryption, you can either specify the type of server-side encryption to use in your S3 PUT requests, or you can set the default encryption configuration in the destination bucket. Server-side encryption options that Amazon S3 provides are Server-side encryption with AWS Key Management Service (AWS KMS) keys (SSE-KMS), Dual-layer server-side encryption with AWS Key Management Service (AWS KMS) keys (DSSE-KMS), Server-side encryption with customer-provided keys (SSE-C). <br>
+For protecting data at rest, and reducing the risk of unauthorized access to sensitive data can be used server-side encryption, as mentioned earlier.
+**Server-side encryption** with Amazon S3 managed keys (SSE-S3) is the default encryption configuration for every bucket in Amazon S3. To use a different type of encryption, you can either specify the type of server-side encryption to use in your S3 PUT requests, or you can set the default encryption configuration in the destination bucket. Server-side encryption options that Amazon S3 provides are Server-side encryption with AWS Key Management Service (AWS KMS) keys (SSE-KMS), Dual-layer server-side encryption with AWS Key Management Service (AWS KMS) keys (DSSE-KMS), Server-side encryption with customer-provided keys (SSE-C). 
 **Client-side encryption** needs a developer to manage the encryption process, the encryption keys, and related tools. manage the encryption process, the encryption keys, and related tools. There are many Amazon S3 client-side encryption options.
 
 ####  Encryption of data in transit
 HTTPS (TLS) is recommended to use, to help prevent potential attackers' encryption of data in transit. It is recommended to allow only encrypted connections over HTTPS (TLS) by using the was: SecureTransport condition in your Amazon S3 bucket policies.
 
 #### "Write Once Read Many" model
-With S3 Object Lock, you can store objects by using a WORM model. S3 Object Lock can help prevent accidental or inappropriate deletion of data. <br>
+With S3 Object Lock, you can store objects by using a WORM model. S3 Object Lock can help prevent accidental or inappropriate deletion of data.
 S3 Object Lock can be used to help protect your AWS CloudTrail logs.
 
 #### Enable Logging and Monitoring
@@ -207,27 +223,53 @@ The attacker has the ability to access, manipulate data, and take control of the
 ![image](/documentation/images/T2.png)
 
 ## Attacks
-### Bucket Takeover
-Bucket Takeover allows access to private storage and data inside it, and takes full control of the content within the bucket.
 
-After identifying misconfigured S3 buckets, often achieved through Bucket Enumeration attackers can now search for configuration settings and security measures implemented on the identified bucket, including IAM and bucket policies. If the attacker can exploit found vulnerabilities and gain unauthorized access to the bucket. If vulnerabilities are found, the attacker can exploit them to gain unauthorized access.
-Upon successful unauthorized access, the attacker now has the ability to manipulate the bucket's configuration. This includes making changes to IAM roles, policies, and other settings. With this, the attacker can effectively take control of the compromised S3 bucket.
-Compromised buckets can further be used in other malicious activities including Exfiltration, Phishing, and supply chain attacks, also attackers are now able to upload a malicious file into the bucket that can trigger malware or ransomware across the network. 
+### Subdoman takeover - Bucket takeover
+Sub domain Takeover attack is when an attacker is able to gain control of a company’s subdomain hosted on a cloud service such as AWS, github etc. because of the DNS entries pointing to that service is not being removed. This allows attacker to set up a phishing page on that sub-domain or serve malicious content.
 
-### Mitigates
-#### Acces Control:
-- As mentioned in the previous attacks, access control is essential when configuring an S3 bucket. 
+Subdomain takeover in amazon s3: Each bucket pointing to a specific domain or subdomain. So sometimes, when s3 buckets is no longer in use customer delete them from their account, but forgets to remove the DNS entry pointing to that subdomain it may escalate to a subdomain takeover because amazon allow non existing bucket names to be claimed again on any other account.
 
-#### Encrypt Sensitive Data:
-- Using server-side encryption. Server-side encryption can help reduce risk to your data by encrypting the data with a key that is stored in a different mechanism than the mechanism that stores the data itself.
-- Using Client-side encryption – In this case, you manage the encryption process, the encryption keys, and related tools. This can additionally help reduce risk to data.
+Since Amazon S3 buckets’ contents can be retrieved over HTTP, they can be used to store and serve static assets such as images, videos, stylesheets, user upload content, or complete static websites. An S3 bucket is accessed by, for example URL our.company.com.s3-website.ap-south-1.amazonaws.com”. Organizations tend to create custom subdomains like “our.company.com”. Custom subdomains are created by adding DNS CNAME record like the one below:
 
-#### Enable Logging and Monitoring: 
-- Analyzing CloudTrail logs for changes to bucket configurations, unauthorized object copies, and tracking user activities can help in identifying potential takeover attempts, allowing for timely intervention, access revocation, and mitigation of security risks.
+Type	    Name Content	                                    TTL	
+CNAME blog	our.company.com.s3-website-us-east-1.amazonaws.com	3000
+
+Later when this bucket is deleted from AWS S3, we still have the DNS record pointing to the bucket URL: since it wasn’t removed, it now points to a bucket that doesn’t exist anymore.In such a case, pointing the browser to blog.char49.com would return a page like the one below:
+![Alt text](/documentation/images/bucketNotFound.png)
+What if someone else creates a new bucket with the same name? Then, that person will be in control of what content is served by our subdomain, thus we’re victims of subdomain takeover. 
+
+**Attack scenario**
+
+During enumeration, attacker can find multiple subdomains one of them is ‘our.company.com’. When attacker tries to access this domain using the browser, the URL raises a ‘404 NOT FOUND’, with some additional information like shown in previous image.
+Since this error message indicates that there is no S3 bucket. Elliot can reuse/reclaim this bucket with folowing command:
+ ```
+    aws s3api create-bucket -bucket our.company.com -region eu-west-2 -create-bucket-configuration LocationConstraint=eu-west-2
+ ```
+ After creation, he applied a policy to the bucket which will allow him to serve static content from this.
+ ```
+    aws s3api put-bucket-policy — bucket assets.ecorp.net -policy file://malicious_policy.json
+ ```
+
+ Now the takeover bucket is up and ready to use, attacker can decide to showcase the harm it can do to the organization. So he uploads a fake login page that resembles Our Organization.
+```
+    aws s3 sync ./static/ s3://our.company.com
+    Note: /static is the local directory that consists of the malicious login page.
+    aws s3 website s3://our.company.net/ — index-document index.html — error-document index.html
+```
+Now when someone acces login page, this webpage is being served from our domain name. Since attacker now controls the S3 bucket he can further perform several malicious attacks such as: Hosting Phishing websites, Hosting Malware, Bypassing CSP policies, Stealing Cookie’s, Man-in-the-browser attacks.
 
 
-### Additional Mitigation - Use of AWS Trusted Advisor:
-- Use AWS Trusted Advisor, which offers automated recommendations for securing resources like S3 buckets.
+## Mitigates
+
+#### Acces Controll:
+- As mentioned in the previous attacks, it is always essential to pay attention to configurations such as setting up IAM user policies and S3 bucket policies, and implement principle of Least-Privilege.
+
+#### DNS records examination:
+- It is my recommendation that developers or IT engineers examine their organization’s DNS records every time there is a termination of a S3 bucket. This will ensure there are no DNS/CNAME entries that point to non-existent S3 buckets which could potentially be exploited.
+
+#### Monitor subdomains:
+- Regularly monitor subdomains to ensure taht they are pointing to the correct S3 bucket.
+
 
 
 
@@ -387,3 +429,5 @@ The next screenshot shows what happens when the object owner uses a pre-signed U
 13. [S3 Ransomware: Attack Vector](https://rhinosecuritylabs.com/aws/s3-ransomware-part-1-attack-vector/)
 14. Misconfigurations Leading to AWS S3 Ransomware Exposure: Hard Facts and Mitigation Techniques 
 15. [Ransomware in the Cloud: Breaking Down The Attack Vectors](https://www.dig.security/post/understand-ransomware-to-protect-your-data-in-the-cloud)
+16. [Subdomain Takeover via Abandoned Amazon S3 Bucket](https://char49.com/articles/subdomain-takeover-via-abandoned-amazon-s3-bucket)
+17. [Sub-Domain Take Over — AWS S3 Bucket](https://towardsaws.com/subdomain-takeover-aws-s3-bucket-4699815d1b62)
